@@ -1,0 +1,3 @@
+@echo off
+echo Creando entorno virtual, esta terminal se cerrara al finalizar...
+python -m venv .venv
