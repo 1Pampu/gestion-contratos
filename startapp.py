@@ -5,28 +5,28 @@ from django.core.management import execute_from_command_line
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 
 def git_pull():
-    # Update repository
+    # Actualizar el repositorio
     os.system("git pull origin main")
 
 def run_server():
-    # Install requirements
+    # Instalar dependencias
     os.system("pip install --upgrade pip")
     os.system("pip install -r requirements.txt")
 
-    # Check if database exists in directory
+    # Verificar si la base de datos existe
     newDB = False
     if not os.path.exists("db.sqlite3"):
         newDB = True
 
-    # Run migrations / Create database
+    # Ejecutar migraciones
     execute_from_command_line(["manage.py", "makemigrations"])
     execute_from_command_line(["manage.py", "migrate"])
 
-    # Create superuser if database is new
+    # Crear superusuario si la base de datos es nueva
     if newDB:
         execute_from_command_line(["manage.py", "createsuperuser"])
 
-    # Open browser and run server
+    # Abrir el navegador
     webbrowser.open("http://127.0.0.1:8000/")
     execute_from_command_line(["manage.py", "runserver", "--noreload"])
 
