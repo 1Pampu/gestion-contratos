@@ -4,7 +4,6 @@ from django.utils import timezone
 
 # Create your views here.
 def index(request):
-    print("call")
     # Filtrar los contratos que ya finalizaron y conservar los vigentes
     contratos_activos = Contrato.objects.filter(finalizacion__lte = timezone.now())
 
