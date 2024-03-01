@@ -40,3 +40,6 @@ class Contrato(models.Model):
     def save(self, *args, **kwargs):
         self.fecha_finalizacion = self.calcular_fin()
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f'{self.locador} - {self.locario} - {self.inmueble}'
