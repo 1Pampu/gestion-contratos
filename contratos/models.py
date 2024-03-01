@@ -1,5 +1,4 @@
 from django.db import models
-from datetime import timedelta
 
 # Create your models here.
 class Persona(models.Model):
@@ -18,7 +17,6 @@ class Inmueble(models.Model):
     ciudad = models.CharField(max_length=50)
     num_partida = models.CharField(max_length=15)
     composicion = models.JSONField()
-    condiciones = models.TextField(max_length=2000)
 
     def __str__(self):
         return self.num_partida
@@ -27,6 +25,7 @@ class Contrato(models.Model):
     locador = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='contratos_locador')
     locario = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='contratos_locario')
     inmueble = models.ForeignKey(Inmueble, on_delete=models.CASCADE)
+    condicion = models.TextField(max_length=2000)
     fecha_inicio = models.DateField()
     duracion = models.DurationField()
     fecha_finalizacion = models.DateField(null=True, blank=True)
