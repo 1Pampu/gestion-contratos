@@ -5,9 +5,19 @@
     <h1>Inicio</h1>
     <p>Bienvenido a la pagina principal</p>
 
-    {% for contrato in contratos %}
-        <p>{{contrato.propiedad}}</p>
-        <p>{{contrato.propietario}}</p>
-        <hr>
-    {% endfor %}
+    <table border="1">
+        <thead>
+            <tr><th>Locador</th><th>Inmueble</th><th>Locatario</th><th>Finaliza</th></tr>
+        </thead>
+        <tbody>
+            {% for contrato in contratos %}
+                <tr>
+                    <td>{{ contrato.locador.nombre }}</td>
+                    <td>{{ contrato.inmueble.num_partida }}</td>
+                    <td>{{ contrato.locatario.nombre }}</td>
+                    <td>{{ contrato.fecha_finalizacion }}</td>
+                </tr>
+            {% endfor %}
+    </table>
+
 {% endblock %}

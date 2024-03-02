@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import timedelta
 
 # Create your models here.
 class Persona(models.Model):
@@ -10,7 +11,7 @@ class Persona(models.Model):
     ciudad = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.dni
+        return self.nombre
 
 class Inmueble(models.Model):
     direccion = models.CharField(max_length=200)
@@ -32,7 +33,8 @@ class Contrato(models.Model):
 
     def calcular_fin(self):
         if self.fecha_inicio and self.duracion:
-            fecha_finalizacion = self.fecha_inicio + self.duracion
+            duracion_dias = self.duracion * 30
+            fecha_finalizacion = self.fecha_inicio + timedelta(days=duracion_dias)
             return fecha_finalizacion
         return None
 

@@ -40,6 +40,7 @@ class ContratoForm(forms.Form):
     def clean(self):
         cleaned_data = super().clean()
         locador = cleaned_data.get('locador')
+        nombre_locador = cleaned_data.get('nombre_locador')
         dni_locador = cleaned_data.get('dni_locador')
         email_locador = cleaned_data.get('email_locador')
         celular_locador = cleaned_data.get('celular_locador')
@@ -47,6 +48,7 @@ class ContratoForm(forms.Form):
         ciudad_locador = cleaned_data.get('ciudad_locador')
 
         locatario = cleaned_data.get('locatario')
+        nombre_locatario = cleaned_data.get('nombre_locatario')
         dni_locatario = cleaned_data.get('dni_locatario')
         email_locatario = cleaned_data.get('email_locatario')
         celular_locatario = cleaned_data.get('celular_locatario')
@@ -60,6 +62,8 @@ class ContratoForm(forms.Form):
         composicion_inmueble = cleaned_data.get('composicion_inmueble')
 
         if not locador:
+            if not nombre_locador:
+                raise forms.ValidationError('Debe ingresar el nombre del locador')
             if not dni_locador:
                 raise forms.ValidationError('Debe ingresar el DNI del locador')
             if not email_locador:
@@ -72,6 +76,8 @@ class ContratoForm(forms.Form):
                 raise forms.ValidationError('Debe ingresar la ciudad del locador')
 
         if not locatario:
+            if not nombre_locatario:
+                raise forms.ValidationError('Debe ingresar el nombre del locatario')
             if not dni_locatario:
                 raise forms.ValidationError('Debe ingresar el DNI del locatario')
             if not email_locatario:
