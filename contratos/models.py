@@ -16,7 +16,7 @@ class Inmueble(models.Model):
     direccion = models.CharField(max_length=200)
     ciudad = models.CharField(max_length=50)
     num_partida = models.CharField(max_length=15)
-    composicion = models.JSONField()
+    composicion = models.TextField(max_length=500)
 
     def __str__(self):
         return self.num_partida
@@ -27,7 +27,7 @@ class Contrato(models.Model):
     inmueble = models.ForeignKey(Inmueble, on_delete=models.CASCADE)
     condicion = models.TextField(max_length=2000)
     fecha_inicio = models.DateField()
-    duracion = models.DurationField()
+    duracion = models.IntegerField()
     fecha_finalizacion = models.DateField(null=True, blank=True)
 
     def calcular_fin(self):

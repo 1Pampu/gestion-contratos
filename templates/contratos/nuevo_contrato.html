@@ -1,0 +1,133 @@
+{% extends "global/base.html" %}
+{% load static %}
+
+
+{% block head %}
+    <script src="{% static 'scripts/checkbox-forms.js' %}"></script>
+    <script>
+        const campos_locador = [
+            '{{form.nombre_locador.id_for_label}}',
+            '{{form.dni_locador.id_for_label}}',
+            '{{form.email_locador.id_for_label}}',
+            '{{form.celular_locador.id_for_label}}',
+            '{{form.domicilio_locador.id_for_label}}',
+            '{{form.ciudad_locador.id_for_label}}'
+        ];
+        const campos_locario = [
+            '{{form.nombre_locario.id_for_label}}',
+            '{{form.dni_locario.id_for_label}}',
+            '{{form.email_locario.id_for_label}}',
+            '{{form.celular_locario.id_for_label}}',
+            '{{form.domicilio_locario.id_for_label}}',
+            '{{form.ciudad_locario.id_for_label}}'
+        ];
+        const campos_inmueble = [
+            '{{form.direccion_inmueble.id_for_label}}',
+            '{{form.ciudad_inmueble.id_for_label}}',
+            '{{form.num_partida_inmueble.id_for_label}}',
+            '{{form.composicion_inmueble.id_for_label}}'
+        ];
+    </script>
+{% endblock head %}
+
+{% block main %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        <h1>Nuevo Contrato</h1>
+
+        <label for="{{form.locador.id_for_label}}">Locador:
+            {{form.locador}}
+        </label>
+        <label for="locador-checkbox" style="display:block">
+            <input type="checkbox" id="locador-checkbox" name="locador-checkbox" onchange="alternarFormulario('nuevo-locador', '{{form.locador.id_for_label}}', campos_locador)">
+            Ingresar nueva persona
+        </label>
+        <div id="nuevo-locador" style="display: none">
+            <label for="{{form.nombre_locador.id_for_label}}" style="display: block">Nombre:
+                {{form.nombre_locador}}
+            </label>
+            <label for="{{form.dni_locador.id_for_label}}" style="display: block">DNI:
+                {{form.dni_locador}}
+            </label>
+            <label for="{{form.email_locador.id_for_label}}" style="display:block">Email:
+                {{form.email_locador}}
+            </label>
+            <label for="{{form.celular_locador.id_for_label}}" style="display:block">Celular:
+                {{form.celular_locador}}
+            </label>
+            <label for="{{form.domicilio_locador.id_for_label}}" style="display:block">Domicilio:
+                {{form.domicilio_locador}}
+            </label>
+            <label for="{{form.ciudad_locador.id_for_label}}" style="display:block">Ciudad:
+                {{form.ciudad_locador}}
+            </label>
+        </div>
+        <hr>
+
+        <label for="{{form.locario.id_for_label}}">Locario:
+            {{form.locario}}
+        </label>
+        <label for="locario-checkbox" style="display:block">
+            <input type="checkbox" id="locario-checkbox" name="locario-checkbox" onchange="alternarFormulario('nuevo-locario', '{{form.locario.id_for_label}}', campos_locario)">
+            Ingresar nueva persona
+        </label>
+        <div id="nuevo-locario" style="display: none">
+            <label for="{{form.nombre_locario.id_for_label}}" style="display: block">Nombre:
+                {{form.nombre_locario}}
+            </label>
+            <label for="{{form.dni_locario.id_for_label}}" style="display: block">DNI:
+                {{form.dni_locario}}
+            </label>
+            <label for="{{form.email_locario.id_for_label}}" style="display:block">Email:
+                {{form.email_locario}}
+            </label>
+            <label for="{{form.celular_locario.id_for_label}}" style="display:block">Celular:
+                {{form.celular_locario}}
+            </label>
+            <label for="{{form.domicilio_locario.id_for_label}}" style="display:block">Domicilio:
+                {{form.domicilio_locario}}
+            </label>
+            <label for="{{form.ciudad_locario.id_for_label}}" style="display:block">Ciudad:
+                {{form.ciudad_locario}}
+            </label>
+        </div>
+        <hr>
+
+        <label for="{{form.inmueble.id_for_label}}">Inmueble:
+            {{form.inmueble}}
+        </label>
+        <label for="inmueble-checkbox" style="display:block">
+            <input type="checkbox" id="inmueble-checkbox" name="inmueble-checkbox" onchange="alternarFormulario('nuevo-inmueble', '{{form.inmueble.id_for_label}}', campos_inmueble)">
+            Ingresar nuevo inmueble
+        </label>
+        <div id="nuevo-inmueble" style="display: none">
+            <label for="{{form.direccion_inmueble.id_for_label}}" style="display:block">Direccion:
+                {{form.direccion_inmueble}}
+            </label>
+            <label for="{{form.ciudad_inmueble.id_for_label}}" style="display:block">Ciudad:
+                {{form.ciudad_inmueble}}
+            </label>
+            <label for="{{form.num_partida_inmueble.id_for_label}}" style="display:block">Nº de Partida:
+                {{form.num_partida_inmueble}}
+            </label>
+            <label for="{{form.composicion_inmueble.id_for_label}}" style="display:block">Composicion del Inmueble:
+                {{form.composicion_inmueble}}
+            </label>
+        </div>
+        <label for="{{form.condicion.id_for_label}}" style="display:block">Condicion del Inmueble:
+            {{form.condicion}}
+        </label>
+        <hr>
+
+        <div>
+            <label for="{{form.fecha_inicio.id_for_label}}" style="display:block">Fecha de Inicio:
+                {{form.fecha_inicio}}
+            </label>
+            <label for="{{form.duracion.id_for_label}}" style="display:block">Duracion:
+                {{form.duracion}}
+            </label>
+        </div>
+        {{form.errors}}
+        <button type="submit">Crear</button>
+    </form>
+{% endblock main %}

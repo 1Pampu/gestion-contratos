@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Contrato
+from .forms import ContratoForm
 from django.utils import timezone
 
 # Create your views here.
@@ -12,3 +13,17 @@ def index(request):
         'contratos': contratos_activos
     }
     return render(request, 'contratos/index.html', context)
+
+def nuevo_contrato(request):
+    if request.method == 'POST':
+        form = ContratoForm(request.POST)
+        if form.is_valid():
+            print("A VALID FORM!!!!!!")
+
+    else:
+        form = ContratoForm()
+
+    context = {
+        'form': form
+    }
+    return render(request, 'contratos/nuevo_contrato.html', context)
