@@ -23,7 +23,7 @@ class Inmueble(models.Model):
 
 class Contrato(models.Model):
     locador = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='contratos_locador')
-    locario = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='contratos_locario')
+    locatario = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='contratos_locatario')
     inmueble = models.ForeignKey(Inmueble, on_delete=models.CASCADE)
     condicion = models.TextField(max_length=2000)
     fecha_inicio = models.DateField()
@@ -41,4 +41,4 @@ class Contrato(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f'{self.locador} - {self.locario} - {self.inmueble}'
+        return f'{self.locador} - {self.locatario} - {self.inmueble}'

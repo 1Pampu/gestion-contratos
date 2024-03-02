@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Contrato
 from .forms import ContratoForm
 from django.utils import timezone
@@ -18,7 +18,16 @@ def nuevo_contrato(request):
     if request.method == 'POST':
         form = ContratoForm(request.POST)
         if form.is_valid():
-            print("A VALID FORM!!!!!!")
+
+            if not form.cleaned_data['locador']:
+                pass
+
+
+
+
+
+
+            return redirect('index')
 
     else:
         form = ContratoForm()

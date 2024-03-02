@@ -13,15 +13,15 @@ class ContratoForm(forms.Form):
     domicilio_locador = forms.CharField(max_length=200, required=False)
     ciudad_locador = forms.CharField(max_length=50, required=False)
 
-    locario = forms.ModelChoiceField(queryset=Persona.objects.all(), required=False,
+    locatario = forms.ModelChoiceField(queryset=Persona.objects.all(), required=False,
         widget=forms.Select(attrs={'required': 'required'})
     )
-    nombre_locario = forms.CharField(max_length=100, required=False)
-    dni_locario = forms.CharField(max_length=8, required=False)
-    email_locario = forms.EmailField(max_length=75, required=False)
-    celular_locario = forms.CharField(max_length=18, required=False)
-    domicilio_locario = forms.CharField(max_length=200, required=False)
-    ciudad_locario = forms.CharField(max_length=50, required=False)
+    nombre_locatario = forms.CharField(max_length=100, required=False)
+    dni_locatario = forms.CharField(max_length=8, required=False)
+    email_locatario = forms.EmailField(max_length=75, required=False)
+    celular_locatario = forms.CharField(max_length=18, required=False)
+    domicilio_locatario = forms.CharField(max_length=200, required=False)
+    ciudad_locatario = forms.CharField(max_length=50, required=False)
 
     inmueble = forms.ModelChoiceField(queryset=Inmueble.objects.all(), required=False,
         widget=forms.Select(attrs={'required': 'required'})
@@ -46,12 +46,12 @@ class ContratoForm(forms.Form):
         domicilio_locador = cleaned_data.get('domicilio_locador')
         ciudad_locador = cleaned_data.get('ciudad_locador')
 
-        locario = cleaned_data.get('locario')
-        dni_locario = cleaned_data.get('dni_locario')
-        email_locario = cleaned_data.get('email_locario')
-        celular_locario = cleaned_data.get('celular_locario')
-        domicilio_locario = cleaned_data.get('domicilio_locario')
-        ciudad_locario = cleaned_data.get('ciudad_locario')
+        locatario = cleaned_data.get('locatario')
+        dni_locatario = cleaned_data.get('dni_locatario')
+        email_locatario = cleaned_data.get('email_locatario')
+        celular_locatario = cleaned_data.get('celular_locatario')
+        domicilio_locatario = cleaned_data.get('domicilio_locatario')
+        ciudad_locatario = cleaned_data.get('ciudad_locatario')
 
         inmueble = cleaned_data.get('inmueble')
         direccion_inmueble = cleaned_data.get('direccion_inmueble')
@@ -71,17 +71,17 @@ class ContratoForm(forms.Form):
             if not ciudad_locador:
                 raise forms.ValidationError('Debe ingresar la ciudad del locador')
 
-        if not locario:
-            if not dni_locario:
-                raise forms.ValidationError('Debe ingresar el DNI del locario')
-            if not email_locario:
-                raise forms.ValidationError('Debe ingresar el email del locario')
-            if not celular_locario:
-                raise forms.ValidationError('Debe ingresar el celular del locario')
-            if not domicilio_locario:
-                raise forms.ValidationError('Debe ingresar el domicilio del locario')
-            if not ciudad_locario:
-                raise forms.ValidationError('Debe ingresar la ciudad del locario')
+        if not locatario:
+            if not dni_locatario:
+                raise forms.ValidationError('Debe ingresar el DNI del locatario')
+            if not email_locatario:
+                raise forms.ValidationError('Debe ingresar el email del locatario')
+            if not celular_locatario:
+                raise forms.ValidationError('Debe ingresar el celular del locatario')
+            if not domicilio_locatario:
+                raise forms.ValidationError('Debe ingresar el domicilio del locatario')
+            if not ciudad_locatario:
+                raise forms.ValidationError('Debe ingresar la ciudad del locatario')
 
         if not inmueble:
             if not direccion_inmueble:
