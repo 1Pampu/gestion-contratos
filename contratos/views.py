@@ -6,7 +6,7 @@ from django.utils import timezone
 # Create your views here.
 def index(request):
     # Filtrar los contratos que ya finalizaron y conservar los vigentes
-    contratos_activos = Contrato.objects.filter(fecha_finalizacion__gt = timezone.now())
+    contratos_activos = Contrato.objects.filter(fecha_finalizacion__gt = timezone.now()).order_by('-id')
 
     # Pasar los contratos a la plantilla
     context = {
@@ -27,7 +27,7 @@ def nuevo_contrato(request):
         form = ContratoForm(request.POST)
         if form.is_valid():
 
-            if not form.cleaned_data['locador'] or form.cleaned_data['locador_checkbox']:
+            if not form.cleaned_data['locador'] or form.cleaned_data.get('locador_checkbox'):
                 locador = Persona(
                     nombre = form.cleaned_data['nombre_locador'],
                     dni = form.cleaned_data['dni_locador'],
@@ -40,7 +40,7 @@ def nuevo_contrato(request):
             else:
                 locador = form.cleaned_data['locador']
 
-            if not form.cleaned_data['locatario'] or form.cleaned_data['locatario_checkbox']:
+            if not form.cleaned_data['locatario'] or form.cleaned_data.get('locatario_checkbox'):
                 locatario = Persona(
                     nombre = form.cleaned_data['nombre_locatario'],
                     dni = form.cleaned_data['dni_locatario'],
@@ -53,7 +53,7 @@ def nuevo_contrato(request):
             else:
                 locatario = form.cleaned_data['locatario']
 
-            if not form.cleaned_data['inmueble'] or form.cleaned_data['inmueble_checkbox']:
+            if not form.cleaned_data['inmueble'] or form.cleaned_data.get('inmueble_checkbox'):
                 inmueble = Inmueble(
                     direccion = form.cleaned_data['direccion_inmueble'],
                     ciudad = form.cleaned_data['ciudad_inmueble'],

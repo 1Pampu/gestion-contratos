@@ -8,6 +8,7 @@ function alternarFormulario(formulario_id, selector_id, campos_lista){
         // Deshabilitar el selector y quitarle el atributo required
         selector.setAttribute('disabled', 'disabled')
         selector.removeAttribute('required')
+        selector.value = ''
         // Agregar el atributo required a todos los campos nuevos
         campos_lista.forEach(function(campo){
             document.getElementById(campo).setAttribute('required', 'required')
