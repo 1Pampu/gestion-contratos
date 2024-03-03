@@ -1,0 +1,33 @@
+{% extends "global/base.html" %}
+
+{% block main %}
+    <h1>Locador</h1>
+    <p>Nombre: {{contrato.locador.nombre}}</p>
+    <p>DNI: {{contrato.locador.dni}}</p>
+    <p>Email: {{contrato.locador.email}} </p>
+    <p>Celular: {{contrato.locador.celular}}</p>
+    <p>Domicilio: {{contrato.locador.domicilio}}</p>
+    <p>Ciudad: {{contrato.locador.ciudad}}</p>
+
+    <h1>Locatario</h1>
+    <p>Nombre: {{contrato.locatario.nombre}}</p>
+    <p>DNI: {{contrato.locatario.dni}}</p>
+    <p>Email: {{contrato.locatario.email}} </p>
+    <p>Celular: {{contrato.locatario.celular}}</p>
+    <p>Domicilio: {{contrato.locatario.domicilio}}</p>
+    <p>Ciudad: {{contrato.locatario.ciudad}}</p>
+
+    <h1>Inmueble</h1>
+    <p>Direccion: {{contrato.inmueble.direccion}}</p>
+    <p>Ciudad: {{contrato.inmueble.ciudad}}</p>
+    <p>Nº Partida: {{contrato.inmueble.num_partida}}</p>
+    <p>Composicion: {{contrato.inmueble.composicion}}</p>
+    <p>Condicion: {{contrato.condicion}}</p>
+
+    <h1>Terminos</h1>
+    <p>Fecha Inicio: {{contrato.fecha_inicio}}</p>
+    <p>Duracion: {{contrato.duracion}} Meses</p>
+    <p>Fecha Fin: {{contrato.fecha_finalizacion}}</p>
+
+    <a href="{% url 'index' %}">MENU</a>
+{% endblock %}

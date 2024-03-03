@@ -14,6 +14,14 @@ def index(request):
     }
     return render(request, 'contratos/index.html', context)
 
+def contrato(request, id_contrato):
+    contrato = Contrato.objects.get(pk = id_contrato)
+
+    context = {
+        'contrato': contrato
+    }
+    return render(request, 'contratos/contrato.html', context)
+
 def nuevo_contrato(request):
     if request.method == 'POST':
         form = ContratoForm(request.POST)
@@ -66,8 +74,7 @@ def nuevo_contrato(request):
             )
             contrato.save()
 
-            return redirect('index')
-
+            return redirect('contrato', id_contrato=contrato.id)
     else:
         form = ContratoForm()
 
