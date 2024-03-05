@@ -10,8 +10,8 @@ widget_date = forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
 
 # Create your forms here.
 class ContratoForm(forms.Form):
-    locador = forms.ModelChoiceField(queryset=Persona.objects.all(), required=False, widget=widget_select)
 
+    locador = forms.ModelChoiceField(queryset=Persona.objects.all(), required=False, widget=widget_select)
     nombre_locador = forms.CharField(max_length=100, required=False, widget=widget_text)
     dni_locador = forms.CharField(max_length=8, required=False, widget=widget_text)
     email_locador = forms.EmailField(max_length=75, required=False, widget=widget_text)
@@ -32,6 +32,14 @@ class ContratoForm(forms.Form):
     ciudad_inmueble = forms.CharField(max_length=50, required=False, widget=widget_text)
     num_partida_inmueble = forms.CharField(max_length=15, required=False, widget=widget_text)
     composicion_inmueble = forms.CharField(max_length=500, widget=widget_textarea, required=False)
+
+    garantia = forms.ModelChoiceField(queryset=Persona.objects.all(), required=False, widget=widget_select)
+    nombre_garantia = forms.CharField(max_length=100, required=False, widget=widget_text)
+    dni_garantia = forms.CharField(max_length=8, required=False, widget=widget_text)
+    email_garantia = forms.EmailField(max_length=75, required=False, widget=widget_text)
+    celular_garantia = forms.CharField(max_length=18, required=False, widget=widget_text)
+    domicilio_garantia = forms.CharField(max_length=200, required=False, widget=widget_text)
+    ciudad_garantia = forms.CharField(max_length=50, required=False, widget=widget_text)
 
     condicion = forms.CharField(max_length=2000, widget=widget_textarea)
     fecha_inicio = forms.DateField(widget=widget_date)
@@ -54,6 +62,14 @@ class ContratoForm(forms.Form):
         celular_locatario = cleaned_data.get('celular_locatario')
         domicilio_locatario = cleaned_data.get('domicilio_locatario')
         ciudad_locatario = cleaned_data.get('ciudad_locatario')
+
+        garantia = cleaned_data.get('garantia')
+        nombre_garantia = cleaned_data.get('nombre_garantia')
+        dni_garantia = cleaned_data.get('dni_garantia')
+        email_garantia = cleaned_data.get('email_garantia')
+        celular_garantia = cleaned_data.get('celular_garantia')
+        domicilio_garantia = cleaned_data.get('domicilio_garantia')
+        ciudad_garantia = cleaned_data.get('ciudad_garantia')
 
         inmueble = cleaned_data.get('inmueble')
         direccion_inmueble = cleaned_data.get('direccion_inmueble')
@@ -88,6 +104,20 @@ class ContratoForm(forms.Form):
                 raise forms.ValidationError('Debe ingresar el domicilio del locatario')
             if not ciudad_locatario:
                 raise forms.ValidationError('Debe ingresar la ciudad del locatario')
+
+        if not garantia:
+            if not nombre_garantia:
+                raise forms.ValidationError('Debe ingresar el nombre de la garantía')
+            if not dni_garantia:
+                raise forms.ValidationError('Debe ingresar el DNI de la garantía')
+            if not email_garantia:
+                raise forms.ValidationError('Debe ingresar el email de la garantía')
+            if not celular_garantia:
+                raise forms.ValidationError('Debe ingresar el celular de la garantía')
+            if not domicilio_garantia:
+                raise forms.ValidationError('Debe ingresar el domicilio de la garantía')
+            if not ciudad_garantia:
+                raise forms.ValidationError('Debe ingresar la ciudad de la garantía')
 
         if not inmueble:
             if not direccion_inmueble:

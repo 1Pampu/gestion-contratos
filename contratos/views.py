@@ -28,7 +28,8 @@ def nuevo_contrato(request):
         form = ContratoForm(request.POST)
         if form.is_valid():
 
-            if not form.cleaned_data['locador'] or form.cleaned_data.get('locador_checkbox'):
+            # Extraer informacion de el locador
+            if request.POST.get('locador-checkbox'):
                 locador = Persona(
                     nombre = form.cleaned_data['nombre_locador'],
                     dni = form.cleaned_data['dni_locador'],
@@ -37,11 +38,11 @@ def nuevo_contrato(request):
                     domicilio = form.cleaned_data['domicilio_locador'],
                     ciudad = form.cleaned_data['ciudad_locador']
                 )
-                locador.save()
             else:
                 locador = form.cleaned_data['locador']
 
-            if not form.cleaned_data['locatario'] or form.cleaned_data.get('locatario_checkbox'):
+            # Extraer informacion de el lacatario
+            if request.POST.get('locatario-checkbox'):
                 locatario = Persona(
                     nombre = form.cleaned_data['nombre_locatario'],
                     dni = form.cleaned_data['dni_locatario'],
@@ -50,29 +51,52 @@ def nuevo_contrato(request):
                     domicilio = form.cleaned_data['domicilio_locatario'],
                     ciudad = form.cleaned_data['ciudad_locatario']
                 )
-                locatario.save()
             else:
                 locatario = form.cleaned_data['locatario']
 
-            if not form.cleaned_data['inmueble'] or form.cleaned_data.get('inmueble_checkbox'):
+            # Extraer informacion de el garante
+            if request.POST.get('garantia-checkbox'):
+                garantia = Persona(
+                    nombre = form.cleaned_data['nombre_garantia'],
+                    dni = form.cleaned_data['dni_garantia'],
+                    email = form.cleaned_data['email_garantia'],
+                    celular = form.cleaned_data['celular_garantia'],
+                    domicilio = form.cleaned_data['domicilio_garantia'],
+                    ciudad = form.cleaned_data['ciudad_garantia']
+                )
+            else:
+                garantia = form.cleaned_data['garantia']
+
+            # Extraer informacion de el inmueble
+            if request.POST.get('inmueble-checkbox'):
                 inmueble = Inmueble(
                     direccion = form.cleaned_data['direccion_inmueble'],
                     ciudad = form.cleaned_data['ciudad_inmueble'],
                     num_partida = form.cleaned_data['num_partida_inmueble'],
                     composicion = form.cleaned_data['composicion_inmueble']
                 )
-                inmueble.save()
             else:
                 inmueble = form.cleaned_data['inmueble']
 
             contrato = Contrato(
                 locador = locador,
                 locatario = locatario,
+                garantia = garantia,
                 inmueble = inmueble,
                 condicion = form.cleaned_data['condicion'],
                 fecha_inicio = form.cleaned_data['fecha_inicio'],
                 duracion = form.cleaned_data['duracion']
             )
+
+            if request.POST.get('locador-checkbox'):
+                locador.save()
+            if request.POST.get('locatario-checkbox'):
+                locatario.save()
+            if request.POST.get('garantia-checkbox'):
+                garantia.save()
+            if request.POST.get('inmueble-checkbox'):
+                inmueble.save()
+
             contrato.save()
 
             return redirect('contrato', id_contrato=contrato.id)

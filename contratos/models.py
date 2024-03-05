@@ -25,6 +25,7 @@ class Inmueble(models.Model):
 class Contrato(models.Model):
     locador = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='contratos_locador')
     locatario = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='contratos_locatario')
+    garantia = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='contratos_garantia')
     inmueble = models.ForeignKey(Inmueble, on_delete=models.CASCADE)
     condicion = models.TextField(max_length=2000)
     fecha_inicio = models.DateField()
