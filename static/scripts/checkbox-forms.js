@@ -4,7 +4,7 @@ function alternarFormulario(formulario_id, selector_id, campos_lista){
 
     if(formulario.style.display == 'none'){
         // Mostrar formulario
-        formulario.style.display = 'block';
+        formulario.style.display = 'flex';
         // Deshabilitar el selector y quitarle el atributo required
         selector.setAttribute('disabled', 'disabled')
         selector.removeAttribute('required')

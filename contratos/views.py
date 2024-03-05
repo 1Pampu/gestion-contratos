@@ -10,7 +10,8 @@ def index(request):
 
     # Pasar los contratos a la plantilla
     context = {
-        'contratos': contratos_activos
+        'contratos': contratos_activos,
+        'page': 'index'
     }
     return render(request, 'contratos/index.html', context)
 
@@ -79,6 +80,7 @@ def nuevo_contrato(request):
         form = ContratoForm()
 
     context = {
-        'form': form
+        'form': form,
+        'page': 'nuevo_contrato'
     }
     return render(request, 'contratos/nuevo_contrato.html', context)

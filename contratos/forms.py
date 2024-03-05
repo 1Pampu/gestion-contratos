@@ -1,41 +1,41 @@
 from django import forms
 from .models import Persona, Inmueble
 
+# Widgets Classes
+widget_select = forms.Select(attrs={'required': 'required', 'class': 'form-select'})
+widget_text = forms.TextInput(attrs={'class': 'form-control'})
+widget_textarea = forms.Textarea(attrs={'class': 'form-control', 'rows': '3'})
+widget_integer = forms.NumberInput(attrs={'class': 'form-control'})
+widget_date = forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
+
 # Create your forms here.
 class ContratoForm(forms.Form):
-    locador = forms.ModelChoiceField(queryset=Persona.objects.all(), required=False,
-        widget=forms.Select(attrs={'required': 'required'})
-    )
-    nombre_locador = forms.CharField(max_length=100, required=False)
-    dni_locador = forms.CharField(max_length=8, required=False)
-    email_locador = forms.EmailField(max_length=75, required=False)
-    celular_locador = forms.CharField(max_length=18, required=False)
-    domicilio_locador = forms.CharField(max_length=200, required=False)
-    ciudad_locador = forms.CharField(max_length=50, required=False)
+    locador = forms.ModelChoiceField(queryset=Persona.objects.all(), required=False, widget=widget_select)
 
-    locatario = forms.ModelChoiceField(queryset=Persona.objects.all(), required=False,
-        widget=forms.Select(attrs={'required': 'required'})
-    )
-    nombre_locatario = forms.CharField(max_length=100, required=False)
-    dni_locatario = forms.CharField(max_length=8, required=False)
-    email_locatario = forms.EmailField(max_length=75, required=False)
-    celular_locatario = forms.CharField(max_length=18, required=False)
-    domicilio_locatario = forms.CharField(max_length=200, required=False)
-    ciudad_locatario = forms.CharField(max_length=50, required=False)
+    nombre_locador = forms.CharField(max_length=100, required=False, widget=widget_text)
+    dni_locador = forms.CharField(max_length=8, required=False, widget=widget_text)
+    email_locador = forms.EmailField(max_length=75, required=False, widget=widget_text)
+    celular_locador = forms.CharField(max_length=18, required=False, widget=widget_text)
+    domicilio_locador = forms.CharField(max_length=200, required=False, widget=widget_text)
+    ciudad_locador = forms.CharField(max_length=50, required=False, widget=widget_text)
 
-    inmueble = forms.ModelChoiceField(queryset=Inmueble.objects.all(), required=False,
-        widget=forms.Select(attrs={'required': 'required'})
-    )
-    direccion_inmueble = forms.CharField(max_length=200, required=False)
-    ciudad_inmueble = forms.CharField(max_length=50, required=False)
-    num_partida_inmueble = forms.CharField(max_length=15, required=False)
-    composicion_inmueble = forms.CharField(max_length=500, widget=forms.Textarea(), required=False)
+    locatario = forms.ModelChoiceField(queryset=Persona.objects.all(), required=False, widget=widget_select)
+    nombre_locatario = forms.CharField(max_length=100, required=False, widget=widget_text)
+    dni_locatario = forms.CharField(max_length=8, required=False, widget=widget_text)
+    email_locatario = forms.EmailField(max_length=75, required=False, widget=widget_text)
+    celular_locatario = forms.CharField(max_length=18, required=False, widget=widget_text)
+    domicilio_locatario = forms.CharField(max_length=200, required=False, widget=widget_text)
+    ciudad_locatario = forms.CharField(max_length=50, required=False, widget=widget_text)
 
-    condicion = forms.CharField(max_length=2000, widget=forms.Textarea())
-    fecha_inicio = forms.DateField(
-        widget=forms.DateInput(attrs={'type': 'date'})
-    )
-    duracion = forms.IntegerField()
+    inmueble = forms.ModelChoiceField(queryset=Inmueble.objects.all(), required=False, widget=widget_select)
+    direccion_inmueble = forms.CharField(max_length=200, required=False, widget=widget_text)
+    ciudad_inmueble = forms.CharField(max_length=50, required=False, widget=widget_text)
+    num_partida_inmueble = forms.CharField(max_length=15, required=False, widget=widget_text)
+    composicion_inmueble = forms.CharField(max_length=500, widget=widget_textarea, required=False)
+
+    condicion = forms.CharField(max_length=2000, widget=widget_textarea)
+    fecha_inicio = forms.DateField(widget=widget_date)
+    duracion = forms.IntegerField(widget=widget_integer)
 
     def clean(self):
         cleaned_data = super().clean()
