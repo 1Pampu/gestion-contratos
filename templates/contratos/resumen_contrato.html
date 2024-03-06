@@ -1,42 +1,138 @@
 {% extends "global/base.html" %}
 
 {% block main %}
-    <h1>Locador</h1>
-    <p>Nombre: {{contrato.locador.nombre}}</p>
-    <p>DNI: {{contrato.locador.dni}}</p>
-    <p>Email: {{contrato.locador.email}} </p>
-    <p>Celular: {{contrato.locador.celular}}</p>
-    <p>Domicilio: {{contrato.locador.domicilio}}</p>
-    <p>Ciudad: {{contrato.locador.ciudad}}</p>
+    <div  class="mx-auto p-2" style="width: 800px;">
+        <h1 class="text-center mt-2">Resumen del Contrato</h1>
+        <h2>Locador</h2>
+        <div class="row g-1">
+            <div class="col-12">
+                <label class="form-label">Nombre:</label>
+                <input class="form-control" type="text" value="{{contrato.locador.nombre}}" disabled readonly>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">DNI:</label>
+                <input class="form-control" type="text" value="{{contrato.locador.dni}}" disabled readonly>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Email:</label>
+                <input class="form-control" type="text" value="{{contrato.locador.email}}" disabled readonly>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Celular:</label>
+                <input class="form-control" type="text" value="{{contrato.locador.celular}}" disabled readonly>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Domicilio:</label>
+                <input class="form-control" type="text" value="{{contrato.locador.domicilio}}" disabled readonly>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Ciudad:</label>
+                <input class="form-control" type="text" value="{{contrato.locador.ciudad}}" disabled readonly>
+            </div>
+        </div>
+        <hr>
 
-    <h1>Locatario</h1>
-    <p>Nombre: {{contrato.locatario.nombre}}</p>
-    <p>DNI: {{contrato.locatario.dni}}</p>
-    <p>Email: {{contrato.locatario.email}} </p>
-    <p>Celular: {{contrato.locatario.celular}}</p>
-    <p>Domicilio: {{contrato.locatario.domicilio}}</p>
-    <p>Ciudad: {{contrato.locatario.ciudad}}</p>
+        <h2>Locatario</h2>
+        <div class="row g-1">
+            <div class="col-12">
+                <label class="form-label">Nombre:</label>
+                <input class="form-control" type="text" value="{{contrato.locatario.nombre}}" disabled readonly>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">DNI:</label>
+                <input class="form-control" type="text" value="{{contrato.locatario.dni}}" disabled readonly>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Email:</label>
+                <input class="form-control" type="text" value="{{contrato.locatario.email}}" disabled readonly>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Celular:</label>
+                <input class="form-control" type="text" value="{{contrato.locatario.celular}}" disabled readonly>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Domicilio:</label>
+                <input class="form-control" type="text" value="{{contrato.locatario.domicilio}}" disabled readonly>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Ciudad:</label>
+                <input class="form-control" type="text" value="{{contrato.locatario.ciudad}}" disabled readonly>
+            </div>
+        </div>
+        <hr>
 
-    <h1>Garantia de Locacion</h1>
-    <p>Nombre: {{contrato.garantia.nombre}}</p>
-    <p>DNI: {{contrato.garantia.dni}}</p>
-    <p>Email: {{contrato.garantia.email}} </p>
-    <p>Celular: {{contrato.garantia.celular}}</p>
-    <p>Domicilio: {{contrato.garantia.domicilio}}</p>
-    <p>Ciudad: {{contrato.garantia.ciudad}}</p>
+        <h2>Garantia de Locacion</h2>
+        <div class="row g-1">
+            <div class="col-12">
+                <label class="form-label">Nombre:</label>
+                <input class="form-control" type="text" value="{{contrato.garantia.nombre}}" disabled readonly>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">DNI:</label>
+                <input class="form-control" type="text" value="{{contrato.garantia.dni}}" disabled readonly>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Email:</label>
+                <input class="form-control" type="text" value="{{contrato.garantia.email}}" disabled readonly>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Celular:</label>
+                <input class="form-control" type="text" value="{{contrato.garantia.celular}}" disabled readonly>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Domicilio:</label>
+                <input class="form-control" type="text" value="{{contrato.garantia.domicilio}}" disabled readonly>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Ciudad:</label>
+                <input class="form-control" type="text" value="{{contrato.garantia.ciudad}}" disabled readonly>
+            </div>
+        </div>
+        <hr>
 
-    <h1>Inmueble</h1>
-    <p>Direccion: {{contrato.inmueble.direccion}}</p>
-    <p>Ciudad: {{contrato.inmueble.ciudad}}</p>
-    <p>Nº Partida: {{contrato.inmueble.num_partida}}</p>
-    <p>Composicion: {{contrato.inmueble.composicion}}</p>
-    <p>Condicion: {{contrato.condicion}}</p>
+        <h2>Inmueble</h2>
+        <div class="row g-1">
+            <div class="col-md-2">
+                <label class="form-label">Nº de Partida:</label>
+                <input class="form-control" type="text" value="{{contrato.inmueble.num_partida}}" disabled readonly>
+            </div>
+            <div class="col-md-5">
+                <label class="form-label">Direccion:</label>
+                <input class="form-control" type="text" value="{{contrato.inmueble.direccion}}" disabled readonly>
+            </div>
+            <div class="col-md-5">
+                <label class="form-label">Ciudad:</label>
+                <input class="form-control" type="text" value="{{contrato.inmueble.ciudad}}" disabled readonly>
+            </div>
+            <div class="col-12">
+                <label class="form-label">Composicion del Inmueble:</label>
+                <textarea class="form-control" disabled readonly>{{contrato.inmueble.composicion}}</textarea>
+            </div>
+            <div class="col-12">
+                <label class="form-label">Condicion del Inmueble:</label>
+                <textarea class="form-control" disabled readonly>{{contrato.condicion}}</textarea>
+            </div>
+        </div>
+        <hr>
 
-    <h1>Terminos</h1>
-    <p>Fecha Inicio: {{contrato.fecha_inicio}}</p>
-    <p>Duracion: {{contrato.duracion}} Meses</p>
-    <p>Fecha Fin: {{contrato.fecha_finalizacion}}</p>
-
-    <a href="{% url 'index' %}">MENU</a>
-    <a href="{% url 'descargar_contrato' id_contrato=contrato.id %}">Descargar</a>
+        <h2>Terminos</h2>
+        <div class="row g-1">
+            <div class="col-md-3">
+                <label class="form-label">Fecha de Inicio:</label>
+                <input class="form-control" type="date" value="{{contrato.fecha_inicio|date:'Y-m-d'}}" disabled readonly>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Duracion:</label>
+                <input class="form-control" type="text" value="{{contrato.duracion}} Meses" disabled readonly>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Fecha de Finalizacion:</label>
+                <input class="form-control" type="date" value="{{contrato.fecha_finalizacion|date:'Y-m-d'}}" disabled readonly>
+            </div>
+        </div>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">
+            <a class="btn btn-success me-md-2" href="{% url 'descargar_contrato' id_contrato=contrato.id %}">Descargar</a>
+            <a class="btn btn-secondary" href="{% url 'index' %}">Volver</a>
+        </div>
+    </div>
 {% endblock %}
