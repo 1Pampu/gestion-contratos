@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from .models import Contrato, Inmueble, Persona
 from .forms import ContratoForm
-from django.utils import timezone
 from .utils import autocompletar_docx
+from django.utils import timezone
+
 
 # Create your views here.
 def index(request):
@@ -30,7 +31,7 @@ def descargar_contrato(request, id_contrato):
 
     datos = {
         # Locador Info
-        'nombre_locador' : contrato.locador.nombre,
+        'nombre_locador' : contrato.locador.nombre.upper(),
         'dni_locador' : contrato.locador.dni,
         'email_locador' : contrato.locador.email,
         'celular_locador' : contrato.locador.celular,
@@ -38,7 +39,7 @@ def descargar_contrato(request, id_contrato):
         'ciudad_locador' : contrato.locador.ciudad,
 
         # Locatario Info
-        'nombre_locatario' : contrato.locatario.nombre,
+        'nombre_locatario' : contrato.locatario.nombre.upper(),
         'dni_locatario' : contrato.locatario.dni,
         'email_locatario' : contrato.locatario.email,
         'celular_locatario' : contrato.locatario.celular,
@@ -46,7 +47,7 @@ def descargar_contrato(request, id_contrato):
         'ciudad_locatario' : contrato.locatario.ciudad,
 
         # Garantia Info
-        'nombre_garantia' : contrato.garantia.nombre,
+        'nombre_garantia' : contrato.garantia.nombre.upper(),
         'dni_garantia' : contrato.garantia.dni,
         'email_garantia' : contrato.garantia.email,
         'celular_garantia' : contrato.garantia.celular,
