@@ -38,4 +38,5 @@
     <p>Fecha Fin: {{contrato.fecha_finalizacion}}</p>
 
     <a href="{% url 'index' %}">MENU</a>
+    <a href="{% url 'descargar_contrato' id_contrato=contrato.id %}">Descargar</a>
 {% endblock %}

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Contrato, Inmueble, Persona
 from .forms import ContratoForm
 from django.utils import timezone
+from .utils import autocompletar_docx
 
 # Create your views here.
 def index(request):
@@ -15,13 +16,56 @@ def index(request):
     }
     return render(request, 'contratos/index.html', context)
 
-def contrato(request, id_contrato):
+def resumen_contrato(request, id_contrato):
     contrato = Contrato.objects.get(pk = id_contrato)
 
     context = {
         'contrato': contrato
     }
-    return render(request, 'contratos/contrato.html', context)
+    return render(request, 'contratos/resumen_contrato.html', context)
+
+
+def descargar_contrato(request, id_contrato):
+    contrato = Contrato.objects.get(pk = id_contrato)
+
+    datos = {
+        # Locador Info
+        'nombre_locador' : contrato.locador.nombre,
+        'dni_locador' : contrato.locador.dni,
+        'email_locador' : contrato.locador.email,
+        'celular_locador' : contrato.locador.celular,
+        'domicilio_locador' : contrato.locador.domicilio,
+        'ciudad_locador' : contrato.locador.ciudad,
+
+        # Locatario Info
+        'nombre_locatario' : contrato.locatario.nombre,
+        'dni_locatario' : contrato.locatario.dni,
+        'email_locatario' : contrato.locatario.email,
+        'celular_locatario' : contrato.locatario.celular,
+        'domicilio_locatario' : contrato.locatario.domicilio,
+        'ciudad_locatario' : contrato.locatario.ciudad,
+
+        # Garantia Info
+        'nombre_garantia' : contrato.garantia.nombre,
+        'dni_garantia' : contrato.garantia.dni,
+        'email_garantia' : contrato.garantia.email,
+        'celular_garantia' : contrato.garantia.celular,
+        'domicilio_garantia' : contrato.garantia.domicilio,
+        'ciudad_garantia' : contrato.garantia.ciudad,
+
+        # Inmueble Info
+        'direccion_inmueble' : contrato.inmueble.direccion,
+        'ciudad_inmueble' : contrato.inmueble.ciudad,
+        'num_partida' : contrato.inmueble.num_partida,
+        'composicion_inmueble' : contrato.inmueble.composicion,
+
+        # Contrato Info
+        # ! ATENTO CON ESTO SI LO CAMBIO
+        'condicion_inmueble' : contrato.condicion,
+    }
+
+    response = autocompletar_docx('static/documents/plantilla_contratos.docx', datos)
+    return response
 
 def nuevo_contrato(request):
     if request.method == 'POST':
@@ -99,7 +143,7 @@ def nuevo_contrato(request):
 
             contrato.save()
 
-            return redirect('contrato', id_contrato=contrato.id)
+            return redirect('resumen_contrato', id_contrato=contrato.id)
     else:
         form = ContratoForm()
 
