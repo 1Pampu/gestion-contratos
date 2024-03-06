@@ -13,7 +13,7 @@ class ContratoForm(forms.Form):
 
     locador = forms.ModelChoiceField(queryset=Persona.objects.all(), required=False, widget=widget_select)
     nombre_locador = forms.CharField(max_length=100, required=False, widget=widget_text)
-    dni_locador = forms.CharField(max_length=8, required=False, widget=widget_text)
+    dni_locador = forms.CharField(max_length=10, required=False, widget=widget_text)
     email_locador = forms.EmailField(max_length=75, required=False, widget=widget_text)
     celular_locador = forms.CharField(max_length=18, required=False, widget=widget_text)
     domicilio_locador = forms.CharField(max_length=200, required=False, widget=widget_text)
@@ -21,7 +21,7 @@ class ContratoForm(forms.Form):
 
     locatario = forms.ModelChoiceField(queryset=Persona.objects.all(), required=False, widget=widget_select)
     nombre_locatario = forms.CharField(max_length=100, required=False, widget=widget_text)
-    dni_locatario = forms.CharField(max_length=8, required=False, widget=widget_text)
+    dni_locatario = forms.CharField(max_length=10, required=False, widget=widget_text)
     email_locatario = forms.EmailField(max_length=75, required=False, widget=widget_text)
     celular_locatario = forms.CharField(max_length=18, required=False, widget=widget_text)
     domicilio_locatario = forms.CharField(max_length=200, required=False, widget=widget_text)
@@ -35,7 +35,7 @@ class ContratoForm(forms.Form):
 
     garantia = forms.ModelChoiceField(queryset=Persona.objects.all(), required=False, widget=widget_select)
     nombre_garantia = forms.CharField(max_length=100, required=False, widget=widget_text)
-    dni_garantia = forms.CharField(max_length=8, required=False, widget=widget_text)
+    dni_garantia = forms.CharField(max_length=10, required=False, widget=widget_text)
     email_garantia = forms.EmailField(max_length=75, required=False, widget=widget_text)
     celular_garantia = forms.CharField(max_length=18, required=False, widget=widget_text)
     domicilio_garantia = forms.CharField(max_length=200, required=False, widget=widget_text)

@@ -4,7 +4,7 @@ from datetime import timedelta
 # Create your models here.
 class Persona(models.Model):
     nombre = models.CharField(max_length=100)
-    dni = models.CharField(max_length=8)
+    dni = models.CharField(max_length=10)
     email = models.EmailField(max_length=75)
     celular = models.CharField(max_length=18)
     domicilio = models.CharField(max_length=200)
