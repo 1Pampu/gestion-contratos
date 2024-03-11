@@ -2,6 +2,7 @@ from io import BytesIO
 from docx import Document
 from django.http import HttpResponse
 from num2words import num2words
+import locale
 
 def autocompletar_docx(template_path, datos):
     # Abrir el documento
@@ -32,3 +33,9 @@ def autocompletar_docx(template_path, datos):
 def numero_a_texto(numero):
     texto = num2words(numero, lang='es')
     return texto
+
+def fecha_a_texto(date):
+    locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+    string = date.strftime("%d de %B de ")
+    anio = numero_a_texto(date.year)
+    return string + anio

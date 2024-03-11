@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Contrato, Inmueble, Persona
 from .forms import ContratoForm
-from .utils import autocompletar_docx, numero_a_texto
+from .utils import autocompletar_docx, numero_a_texto, fecha_a_texto
 from django.utils import timezone
 
 
@@ -61,9 +61,10 @@ def descargar_contrato(request, id_contrato):
         'composicion_inmueble' : contrato.inmueble.composicion,
 
         # Contrato Info
-        # ! ATENTO CON ESTO SI LO CAMBIO
+        'fecha_inicio' : fecha_a_texto(contrato.fecha_inicio),
+        'fecha_fin' : fecha_a_texto(contrato.fecha_finalizacion),
         'duracion_str' : numero_a_texto(contrato.duracion),
-        'condicion_inmueble' : contrato.condicion,
+        'condicion_inmueble' : contrato.condicion,      # ! ATENTO CON ESTO SI LO CAMBIO
     }
 
     response = autocompletar_docx('static/documents/plantilla_contratos.docx', datos)
