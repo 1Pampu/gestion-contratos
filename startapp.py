@@ -9,9 +9,8 @@ def git_pull():
     os.system("git pull origin main")
 
 def run_server():
-    # Instalar dependencias
+    # Actualizar pip
     os.system("pip install --upgrade pip")
-    os.system("pip install -r requirements.txt")
 
     # Verificar si la base de datos existe
     newDB = False
