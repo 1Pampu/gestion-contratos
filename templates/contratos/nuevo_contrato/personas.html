@@ -13,11 +13,7 @@
             <div class="col-md-2">
                 <label for="{{form.dni.id_for_label}}" class="form-label">D.N.I.:</label>
                 {{form.dni}}
-                <datalist id='persons_list'>
-                    {% for person in persons_list %}
-                    <option value="{{ person.dni }}" data-nombre="{{ person.nombre }}" data-email="{{ person.email }}" data-celular="{{ person.celular }}" data-domicilio="{{ person.domicilio }}" data-ciudad="{{ person.ciudad }}">
-                    {% endfor %}
-                </datalist>
+                <datalist id='persons_list'></datalist>
             </div>
             <div class="col-md-6">
                 <label for="{{form.email.id_for_label}}" class="form-label">Email:</label>
@@ -41,40 +37,84 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var dniField = document.getElementById('id_dni');
-        var nombreField = document.getElementById('id_nombre');
-        var emailField = document.getElementById('id_email');
-        var celularField = document.getElementById('id_celular');
-        var domicilioField = document.getElementById('id_domicilio');
-        var ciudadField = document.getElementById('id_ciudad');
-        var personsList = document.getElementById('persons_list');
-
-        var lastOption = false;
-
-        dniField.addEventListener('change', function() {
-            var selectedDNI = this.value;
-            var selectedOption = Array.from(personsList.options).find(option => option.value === selectedDNI);
-
-            if (selectedOption) {
-                nombreField.value = selectedOption.getAttribute('data-nombre');
-                nombreField.disabled = true;
-                emailField.value = selectedOption.getAttribute('data-email');
-                celularField.value = selectedOption.getAttribute('data-celular');
-                domicilioField.value = selectedOption.getAttribute('data-domicilio');
-                ciudadField.value = selectedOption.getAttribute('data-ciudad');
-                lastOption = true;
+    //! MOVER A UN ARCHIVO JS
+    function debounce(funcion, delay = 500){
+        let timer;
+        return function(){
+            if (timer){
+                clearTimeout(timer);
             }
-            else if (lastOption){
-                nombreField.disabled = false;
-                nombreField.value = '';
-                emailField.value = '';
-                celularField.value = '';
-                domicilioField.value = '';
-                ciudadField.value = '';
-                lastOption = false;
+            const context = this;
+            const args = arguments;
+            timer = setTimeout(() => {
+                funcion.apply(context, args);
+            }, delay);
+        }
+    }
+
+    function buscar_persona(dni){
+
+        var formData = new FormData();
+        formData.append('dni', dni);
+        const url = '{% url "buscar_persona" %}';
+        const options = {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: formData
+        };
+
+        fetch(url, options)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error Fatal');
             }
+            return response.json();
+        })
+        .then(data => {
+            if (Array.isArray(data.persona)){
+                console.log(data.persona);
+                add_persons_to_list(data.persona);
+            } else if (typeof data.persona === 'object' && !Array.isArray(data.persona) && data.persona !== null) {
+                console.log('MATCH: ', data.persona);
+                add_person_to_form(data.persona);
+            } else {
+                console.log('No hay coincidencias');
+            }
+        })
+        .catch(error => {
+            console.error(error);
         });
+    }
+
+    const buscar_persona_debounced = debounce(buscar_persona, 750);
+
+    var dniField = document.getElementById('id_dni');
+    var sugerencias = document.getElementById('persons_list');
+    dniField.addEventListener('input', function(){
+        sugerencias.innerHTML = '';
+        if (dniField.value.length >= 2){
+            buscar_persona_debounced(dniField.value);
+        }
     });
+
+    function add_persons_to_list(persons){
+        for (let i = 0; i < persons.length; i++){
+            var option = document.createElement('option');
+            option.value = persons[i];
+            document.getElementById('persons_list').appendChild(option);
+        }
+    }
+
+    function add_person_to_form(person){
+        document.getElementById('id_nombre').value = person.nombre;
+        document.getElementById('id_nombre').disabled = true;
+        document.getElementById('id_email').value = person.email;
+        document.getElementById('id_celular').value = person.celular;
+        document.getElementById('id_domicilio').value = person.domicilio;
+        document.getElementById('id_ciudad').value = person.ciudad;
+    }
+
 </script>
 {% endblock %}

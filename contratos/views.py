@@ -3,6 +3,8 @@ from .models import Contrato, Inmueble, Persona
 from .forms import ContratoForm, PersonaForm
 from .utils import autocompletar_docx, numero_a_texto, fecha_a_texto
 from django.utils import timezone
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 
 
 # Create your views here.
@@ -91,7 +93,29 @@ def locador(request):
     }
     return render(request, 'contratos/nuevo_contrato/personas.html', context)
 
+#! MOVER A UN MODULO PERSONAS
+@require_POST
+def buscar_persona(request):
+    dni = str(request.POST.get('dni',""))
 
+    if len(dni) >= 2:
+        personas = Persona.objects.filter(dni__startswith = dni)
+        if personas:
+
+            if personas[0].dni == dni:
+                informacion_persona = {
+                    'nombre': personas[0].nombre,
+                    'email': personas[0].email,
+                    'celular': personas[0].celular,
+                    'domicilio': personas[0].domicilio,
+                    'ciudad': personas[0].ciudad
+                }
+                return JsonResponse({'persona': informacion_persona})
+
+            dni_personas = list(personas.values_list('dni', flat=True))
+            return JsonResponse({'persona': dni_personas})
+
+    return JsonResponse({'Error': 'No se ha encontrado la persona'})
 
 # def nuevo_contrato(request):
 #     if request.method == 'POST':
