@@ -7,8 +7,23 @@ widget_text = forms.TextInput(attrs={'class': 'form-control'})
 widget_textarea = forms.Textarea(attrs={'class': 'form-control', 'rows': '3'})
 widget_integer = forms.NumberInput(attrs={'class': 'form-control'})
 widget_date = forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
+widget_text_list = forms.TextInput(attrs={'class': 'form-control', 'list': 'persons_list'})
 
 # Create your forms here.
+class PersonaForm(forms.ModelForm):
+
+    nombre = forms.CharField(widget=widget_text)
+    dni = forms.CharField(widget= widget_text_list)
+    email = forms.EmailField(widget=widget_text)
+    celular = forms.CharField(widget=widget_text)
+    domicilio = forms.CharField(widget=widget_text)
+    ciudad = forms.CharField(widget=widget_text)
+
+    class Meta:
+        model = Persona
+        fields = ['nombre', 'dni', 'email', 'celular', 'domicilio', 'ciudad']
+
+
 class ContratoForm(forms.Form):
 
     locador = forms.ModelChoiceField(queryset=Persona.objects.all(), required=False, widget=widget_select)

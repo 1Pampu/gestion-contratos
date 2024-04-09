@@ -1,0 +1,65 @@
+{% extends "global/base.html" %}
+
+{% block main %}
+<div class="mx-auto p-2" style="width: 800px;" >
+<h1 class="text-center mt-2">{{title}}</h1>
+<form action="" method="POST" >
+    {% csrf_token %}
+    <div class="row g-1">
+        <div class="col-12">
+            <label for="{{form.nombre.id_for_label}}" class="form-label">Nombre:</label>
+            {{form.nombre}}
+        </div>
+        <div class="col-md-2">
+            <label for="{{form.dni.id_for_label}}" class="form-label">D.N.I.:</label>
+            {{form.dni}}
+            <datalist id='persons_list'>
+                {% for person in persons_list %}
+                <option value="{{ person.dni }}" data-nombre="{{ person.nombre }}" data-email="{{ person.email }}" data-celular="{{ person.celular }}" data-domicilio="{{ person.domicilio }}" data-ciudad="{{ person.ciudad }}">
+                {% endfor %}
+            </datalist>
+        </div>
+        <div class="col-md-6">
+            <label for="{{form.email.id_for_label}}" class="form-label">Email:</label>
+            {{form.email}}
+        </div>
+        <div class="col-md-4">
+            <label for="{{form.celular.id_for_label}}" class="form-label">Celular:</label>
+                {{form.celular}}
+        </div>
+        <div class="col-md-6">
+            <label for="{{form.domicilio.id_for_label}}" class="form-label">Domicilio:</label>
+            {{form.domicilio}}
+        </div>
+        <div class="col-md-6">
+            <label for="{{form.ciudad.id_for_label}}" class="form-label">Ciudad:</label>
+            {{form.ciudad}}
+        </div>
+    </div>
+</form>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var dniField = document.getElementById('id_dni');
+        var nombreField = document.getElementById('id_nombre');
+        var emailField = document.getElementById('id_email');
+        var celularField = document.getElementById('id_celular');
+        var domicilioField = document.getElementById('id_domicilio');
+        var ciudadField = document.getElementById('id_ciudad');
+        var personsList = document.getElementById('persons_list');
+
+        dniField.addEventListener('change', function() {
+            var selectedDNI = this.value;
+            var selectedOption = Array.from(personsList.options).find(option => option.value === selectedDNI);
+            if (selectedOption) {
+                nombreField.value = selectedOption.getAttribute('data-nombre');
+                emailField.value = selectedOption.getAttribute('data-email');
+                celularField.value = selectedOption.getAttribute('data-celular');
+                domicilioField.value = selectedOption.getAttribute('data-domicilio');
+                ciudadField.value = selectedOption.getAttribute('data-ciudad');
+            }
+        });
+    });
+</script>
+{% endblock %}
