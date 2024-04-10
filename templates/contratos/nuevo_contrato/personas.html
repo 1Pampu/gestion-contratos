@@ -15,7 +15,6 @@
                 <label for="{{form.nombre.id_for_label}}" class="form-label">Nombre:</label>
                 {{form.nombre}}
             </div>
-
             <div class="col-md-6">
                 <label for="{{form.email.id_for_label}}" class="form-label">Email:</label>
                 {{form.email}}
@@ -96,6 +95,7 @@
     var sugerencias = document.getElementById('persons_list');
     dniField.addEventListener('input', function(){
         sugerencias.innerHTML = '';
+        no_letters(dniField);
         if (lastMatch){
             clear_form();
         }
@@ -128,5 +128,14 @@
         document.getElementById('id_ciudad').value = '';
     }
 
+    function no_letters(field){
+        let value = field.value;
+        value = value.replace(/[^0-9.]/g, '');
+        if (value.length > 10) {
+            console.log('Te pasaste')
+            value = value.slice(0, 10);
+        }
+        field.value = value
+    }
 </script>
 {% endblock %}
