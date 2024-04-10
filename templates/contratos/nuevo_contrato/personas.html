@@ -6,20 +6,21 @@
     <form action="" method="POST" >
         {% csrf_token %}
         <div class="row g-1">
-            <div class="col-12">
-                <label for="{{form.nombre.id_for_label}}" class="form-label">Nombre:</label>
-                {{form.nombre}}
-            </div>
             <div class="col-md-2">
                 <label for="{{form.dni.id_for_label}}" class="form-label">D.N.I.:</label>
                 {{form.dni}}
                 <datalist id='persons_list'></datalist>
             </div>
+            <div class="col-10">
+                <label for="{{form.nombre.id_for_label}}" class="form-label">Nombre:</label>
+                {{form.nombre}}
+            </div>
+
             <div class="col-md-6">
                 <label for="{{form.email.id_for_label}}" class="form-label">Email:</label>
                 {{form.email}}
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <label for="{{form.celular.id_for_label}}" class="form-label">Celular:</label>
                     {{form.celular}}
             </div>
@@ -113,7 +114,6 @@
 
     function add_person_to_form(person){
         document.getElementById('id_nombre').value = person.nombre;
-        document.getElementById('id_nombre').disabled = true;
         document.getElementById('id_email').value = person.email;
         document.getElementById('id_celular').value = person.celular;
         document.getElementById('id_domicilio').value = person.domicilio;
@@ -122,7 +122,6 @@
 
     function clear_form(){
         document.getElementById('id_nombre').value = '';
-        document.getElementById('id_nombre').disabled = false;
         document.getElementById('id_email').value = '';
         document.getElementById('id_celular').value = '';
         document.getElementById('id_domicilio').value = '';
