@@ -37,6 +37,7 @@
 </div>
 
 <script>
+    var lastMatch = false
     //! MOVER A UN ARCHIVO JS
     function debounce(funcion, delay = 500){
         let timer;
@@ -74,11 +75,11 @@
         })
         .then(data => {
             if (Array.isArray(data.persona)){
-                console.log(data.persona);
+                lastMatch = false;
                 add_persons_to_list(data.persona);
             } else if (typeof data.persona === 'object' && !Array.isArray(data.persona) && data.persona !== null) {
-                console.log('MATCH: ', data.persona);
                 add_person_to_form(data.persona);
+                lastMatch = true;
             } else {
                 console.log('No hay coincidencias');
             }
@@ -88,12 +89,15 @@
         });
     }
 
-    const buscar_persona_debounced = debounce(buscar_persona, 750);
+    const buscar_persona_debounced = debounce(buscar_persona, 500);
 
     var dniField = document.getElementById('id_dni');
     var sugerencias = document.getElementById('persons_list');
     dniField.addEventListener('input', function(){
         sugerencias.innerHTML = '';
+        if (lastMatch){
+            clear_form();
+        }
         if (dniField.value.length >= 2){
             buscar_persona_debounced(dniField.value);
         }
@@ -114,6 +118,15 @@
         document.getElementById('id_celular').value = person.celular;
         document.getElementById('id_domicilio').value = person.domicilio;
         document.getElementById('id_ciudad').value = person.ciudad;
+    }
+
+    function clear_form(){
+        document.getElementById('id_nombre').value = '';
+        document.getElementById('id_nombre').disabled = false;
+        document.getElementById('id_email').value = '';
+        document.getElementById('id_celular').value = '';
+        document.getElementById('id_domicilio').value = '';
+        document.getElementById('id_ciudad').value = '';
     }
 
 </script>
