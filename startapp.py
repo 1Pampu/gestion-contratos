@@ -9,8 +9,6 @@ def git_pull():
     os.system("git pull origin main")
 
 def run_server():
-    # Actualizar pip
-    os.system("pip install --upgrade pip")
 
     # Verificar si la base de datos existe
     newDB = False
@@ -20,6 +18,7 @@ def run_server():
     # Ejecutar migraciones
     execute_from_command_line(["manage.py", "makemigrations"])
     execute_from_command_line(["manage.py", "makemigrations", "contratos"])
+    execute_from_command_line(["manage.py", "makemigrations", "personas"])
     execute_from_command_line(["manage.py", "migrate"])
 
     # Crear superusuario si la base de datos es nueva
