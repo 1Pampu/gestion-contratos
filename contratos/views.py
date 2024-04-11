@@ -71,13 +71,10 @@ def descargar_contrato(request, id_contrato):
     response = autocompletar_docx('static/documents/plantilla_contratos.docx', datos)
     return response
 
-def nuevo_contrato(request):
-    return redirect('locador')
-
-def locador(request):
+def nuevo_contrato_locador(request):
     valid, form = agregar_actualizar_persona(request)
     if valid:
-        return redirect('index') #! CAMBIAR CUANDO ESTE LISTO LOCATARIO
+        return redirect('nuevo_contrato_locatario')
 
     context = {
         'form': form,
@@ -85,6 +82,19 @@ def locador(request):
         'title': 'Locador',
     }
     return render(request, 'contratos/nuevo_contrato/personas.html', context)
+
+def nuevo_contrato_locatario(request):
+    valid, form = agregar_actualizar_persona(request)
+    if valid:
+        return redirect('index') #! CAMBIAR CUANDO ESTE LISTO GARANTE
+
+    context = {
+        'form': form,
+        'page': 'nuevo_contrato',
+        'title': 'Locatario',
+    }
+    return render(request, 'contratos/nuevo_contrato/personas.html', context)
+
 
 # def nuevo_contrato(request):
 #     if request.method == 'POST':

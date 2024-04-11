@@ -19,4 +19,4 @@ def agregar_actualizar_persona(request):
                     return True, form
     else:
         form = PersonaForm()
-        return False, form
+    return False, form
