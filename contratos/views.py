@@ -1,10 +1,9 @@
 from django.shortcuts import render, redirect
 from .models import Contrato, Inmueble, Persona
-from .forms import ContratoForm, PersonaForm
+from .forms import ContratoForm
 from .utils import autocompletar_docx, numero_a_texto, fecha_a_texto
 from django.utils import timezone
-from django.http import JsonResponse
-from django.views.decorators.http import require_POST
+from personas.utils import agregar_actualizar_persona
 
 
 # Create your views here.
@@ -76,24 +75,9 @@ def nuevo_contrato(request):
     return redirect('locador')
 
 def locador(request):
-    if request.method == 'POST':
-        form = PersonaForm(request.POST)
-
-        if form.is_valid():
-            form.save()
-            # return redirect('locatario')
-            return redirect('index')
-        else:
-            dni = request.POST.get('dni', "")
-            persona_existente = Persona.objects.filter(dni = dni).first()
-            if persona_existente:
-                form = PersonaForm(request.POST, instance = persona_existente)
-                if form.is_valid():
-                    form.save()
-                    # return redirect('locatario')
-                    return redirect('index')
-    else:
-        form = PersonaForm()
+    valid, form = agregar_actualizar_persona(request)
+    if valid:
+        return redirect('index') #! CAMBIAR CUANDO ESTE LISTO LOCATARIO
 
     context = {
         'form': form,
@@ -101,29 +85,6 @@ def locador(request):
         'title': 'Locador',
     }
     return render(request, 'contratos/nuevo_contrato/personas.html', context)
-
-#! MOVER A UN MODULO PERSONAS
-@require_POST
-def buscar_persona(request):
-    dni = str(request.POST.get('dni',""))
-
-    if len(dni) >= 2:
-        personas = Persona.objects.filter(dni__startswith = dni)
-        if personas:
-            if personas[0].dni == int(dni):
-                informacion_persona = {
-                    'nombre': personas[0].nombre,
-                    'email': personas[0].email,
-                    'celular': personas[0].celular,
-                    'domicilio': personas[0].domicilio,
-                    'ciudad': personas[0].ciudad
-                }
-                return JsonResponse({'persona': informacion_persona})
-
-            dni_personas = list(personas.values_list('dni', flat=True))
-            return JsonResponse({'persona': dni_personas})
-
-    return JsonResponse({'Error': 'No se ha encontrado la persona'})
 
 # def nuevo_contrato(request):
 #     if request.method == 'POST':

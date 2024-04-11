@@ -78,7 +78,6 @@
             return response.json();
         })
         .then(data => {
-            console.log(data.persona);
             if (Array.isArray(data.persona)){
                 lastMatch = false;
                 add_persons_to_list(data.persona);
