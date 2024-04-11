@@ -78,10 +78,20 @@ def nuevo_contrato(request):
 def locador(request):
     if request.method == 'POST':
         form = PersonaForm(request.POST)
+
         if form.is_valid():
             form.save()
             # return redirect('locatario')
             return redirect('index')
+        else:
+            dni = request.POST.get('dni', "")
+            persona_existente = Persona.objects.filter(dni = dni).first()
+            if persona_existente:
+                form = PersonaForm(request.POST, instance = persona_existente)
+                if form.is_valid():
+                    form.save()
+                    # return redirect('locatario')
+                    return redirect('index')
     else:
         form = PersonaForm()
 
