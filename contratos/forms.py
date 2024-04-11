@@ -7,13 +7,13 @@ widget_text = forms.TextInput(attrs={'class': 'form-control'})
 widget_textarea = forms.Textarea(attrs={'class': 'form-control', 'rows': '3'})
 widget_integer = forms.NumberInput(attrs={'class': 'form-control'})
 widget_date = forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
-widget_dni = forms.TextInput(attrs={'class': 'form-control', 'list': 'persons_list', 'pattern': '[0-9]'})
+widget_dni = forms.TextInput(attrs={'class': 'form-control', 'list': 'persons_list'})
 
 # Create your forms here.
 class PersonaForm(forms.ModelForm):
 
     nombre = forms.CharField(widget=widget_text)
-    dni = forms.IntegerField(widget=widget_dni)
+    dni = forms.CharField(widget=widget_dni)
     email = forms.EmailField(widget=widget_text)
     celular = forms.CharField(widget=widget_text)
     domicilio = forms.CharField(widget=widget_text)
@@ -22,15 +22,6 @@ class PersonaForm(forms.ModelForm):
     class Meta:
         model = Persona
         fields = ['nombre', 'dni', 'email', 'celular', 'domicilio', 'ciudad']
-
-    def cleaned_dni(self):
-        dni = self.cleaned_data['dni']
-        dni_sin_puntos = dni.replace('.', '')
-        return dni_sin_puntos
-
-    def clean(self):
-        cleaned_data = super().clean()
-        return cleaned_data
 
 class ContratoForm(forms.Form):
 

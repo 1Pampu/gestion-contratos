@@ -80,16 +80,15 @@ def locador(request):
         form = PersonaForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('locatario')
+            # return redirect('locatario')
+            return redirect('index')
     else:
         form = PersonaForm()
 
-    persons = Persona.objects.all()
     context = {
         'form': form,
         'page': 'nuevo_contrato',
         'title': 'Locador',
-        'persons_list': persons
     }
     return render(request, 'contratos/nuevo_contrato/personas.html', context)
 
@@ -101,8 +100,7 @@ def buscar_persona(request):
     if len(dni) >= 2:
         personas = Persona.objects.filter(dni__startswith = dni)
         if personas:
-
-            if personas[0].dni == dni:
+            if personas[0].dni == int(dni):
                 informacion_persona = {
                     'nombre': personas[0].nombre,
                     'email': personas[0].email,

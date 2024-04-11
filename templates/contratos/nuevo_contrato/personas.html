@@ -33,6 +33,10 @@
             </div>
         </div>
         {{form.errors}}
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5 mt-5">
+            <a class="btn btn-secondary" href="{% url 'index' %}">Volver</a>
+            <button class="btn btn-success me-md-2" type="submit">Siguiente</button>
+        </div>
     </form>
 </div>
 
@@ -74,6 +78,7 @@
             return response.json();
         })
         .then(data => {
+            console.log(data.persona);
             if (Array.isArray(data.persona)){
                 lastMatch = false;
                 add_persons_to_list(data.persona);
@@ -130,10 +135,9 @@
 
     function no_letters(field){
         let value = field.value;
-        value = value.replace(/[^0-9.]/g, '');
-        if (value.length > 10) {
-            console.log('Te pasaste')
-            value = value.slice(0, 10);
+        value = value.replace(/[^0-9]/g, '');
+        if (value.length > 8) {
+            value = value.slice(0, 8);
         }
         field.value = value
     }
