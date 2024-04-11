@@ -1,0 +1,136 @@
+<form action="" method="POST" >
+    {% csrf_token %}
+    <div class="row g-1">
+        <div class="col-md-2">
+            <label for="{{form.dni.id_for_label}}" class="form-label">D.N.I.:</label>
+            {{form.dni}}
+            <datalist id='persons_list'></datalist>
+        </div>
+        <div class="col-10">
+            <label for="{{form.nombre.id_for_label}}" class="form-label">Nombre:</label>
+            {{form.nombre}}
+        </div>
+        <div class="col-md-6">
+            <label for="{{form.email.id_for_label}}" class="form-label">Email:</label>
+            {{form.email}}
+        </div>
+        <div class="col-md-6">
+            <label for="{{form.celular.id_for_label}}" class="form-label">Celular:</label>
+                {{form.celular}}
+        </div>
+        <div class="col-md-6">
+            <label for="{{form.domicilio.id_for_label}}" class="form-label">Domicilio:</label>
+            {{form.domicilio}}
+        </div>
+        <div class="col-md-6">
+            <label for="{{form.ciudad.id_for_label}}" class="form-label">Ciudad:</label>
+            {{form.ciudad}}
+        </div>
+    </div>
+    {{form.errors}}
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5 mt-5">
+        <a class="btn btn-secondary" href="{% url 'index' %}">Volver</a>
+        <button class="btn btn-success me-md-2" type="submit">Siguiente</button>
+    </div>
+</form>
+
+<script>
+    var lastMatch = false
+    function debounce(funcion, delay = 500){
+        let timer;
+        return function(){
+            if (timer){
+                clearTimeout(timer);
+            }
+            const context = this;
+            const args = arguments;
+            timer = setTimeout(() => {
+                funcion.apply(context, args);
+            }, delay);
+        }
+    }
+
+    function buscar_persona(dni){
+
+        var formData = new FormData();
+        formData.append('dni', dni);
+        const url = '{% url "buscar_persona" %}';
+        const options = {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: formData
+        };
+
+        fetch(url, options)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error Fatal');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (Array.isArray(data.persona)){
+                lastMatch = false;
+                add_persons_to_list(data.persona);
+            } else if (typeof data.persona === 'object' && !Array.isArray(data.persona) && data.persona !== null) {
+                add_person_to_form(data.persona);
+                lastMatch = true;
+            } else {
+                console.log('No hay coincidencias');
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }
+
+    const buscar_persona_debounced = debounce(buscar_persona, 650);
+
+    var dniField = document.getElementById('id_dni');
+    var sugerencias = document.getElementById('persons_list');
+    dniField.addEventListener('input', function(){
+        sugerencias.innerHTML = '';
+        no_letters(dniField);
+        if (lastMatch){
+            clear_form();
+        }
+        if (dniField.value.length >= 2){
+            buscar_persona_debounced(dniField.value);
+        }
+    });
+
+    function add_persons_to_list(persons){
+        for (let i = 0; i < persons.length; i++){
+            var option = document.createElement('option');
+            option.value = persons[i];
+            document.getElementById('persons_list').appendChild(option);
+        }
+    }
+
+    function add_person_to_form(person){
+        document.getElementById('id_nombre').value = person.nombre;
+        document.getElementById('id_email').value = person.email;
+        document.getElementById('id_celular').value = person.celular;
+        document.getElementById('id_domicilio').value = person.domicilio;
+        document.getElementById('id_ciudad').value = person.ciudad;
+    }
+
+    function clear_form(){
+        document.getElementById('id_nombre').value = '';
+        document.getElementById('id_email').value = '';
+        document.getElementById('id_celular').value = '';
+        document.getElementById('id_domicilio').value = '';
+        document.getElementById('id_ciudad').value = '';
+    }
+
+    function no_letters(field){
+        let value = field.value;
+        value = value.replace(/[^0-9]/g, '');
+        if (value.length > 8) {
+            value = value.slice(0, 8);
+        }
+        field.value = value
+    }
+</script>
