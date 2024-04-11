@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Contrato, Inmueble, Persona
+from .models import Contrato, Inmueble
 from .forms import ContratoForm
 from .utils import autocompletar_docx, numero_a_texto, fecha_a_texto
 from django.utils import timezone
