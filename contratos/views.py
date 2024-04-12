@@ -93,12 +93,37 @@ def nuevo_contrato_locatario(request):
 
     valid, form = agregar_actualizar_persona(request)
     if valid:
-        return redirect('index')        #! FALTA ESTOOO!!!!!
+        dni_locatario = form.cleaned_data['dni']
+        url = reverse('nuevo_contrato_garantia') + f'?locador={dni_locador}&locatario={dni_locatario}'
+        return redirect(url)
 
     context = {
         'form': form,
         'page': 'nuevo_contrato',
         'title': 'Locatario',
+    }
+    return render(request, 'contratos/nuevo_contrato/personas.html', context)
+
+def nuevo_contrato_garantia(request):
+    dni_locador = request.GET.get('locador')
+    if not verificar_persona(dni_locador):
+        return render(request, 'global/errors.html', {'error': 404, 'mensaje': 'Locador no encontrado'})
+
+    dni_locatario = request.GET.get('locatario')
+    print(dni_locatario)
+    if not verificar_persona(dni_locatario):
+        return render(request, 'global/errors.html', {'error': 404, 'mensaje': 'Locatario no encontrado'})
+
+    valid, form = agregar_actualizar_persona(request)
+    if valid:
+        dni_garantia = form.cleaned_data['dni']
+        url = reverse('index') + f'?locador={dni_locador}&locatario={dni_locatario}&garantia={dni_garantia}'
+        return redirect(url)        #! FALTA ESTOOO!!!!!
+
+    context = {
+        'form': form,
+        'page': 'nuevo_contrato',
+        'title': 'Garantia',
     }
     return render(request, 'contratos/nuevo_contrato/personas.html', context)
 
