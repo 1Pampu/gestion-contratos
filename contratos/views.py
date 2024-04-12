@@ -110,7 +110,6 @@ def nuevo_contrato_garantia(request):
         return render(request, 'global/errors.html', {'error': 404, 'mensaje': 'Locador no encontrado'})
 
     dni_locatario = request.GET.get('locatario')
-    print(dni_locatario)
     if not verificar_persona(dni_locatario):
         return render(request, 'global/errors.html', {'error': 404, 'mensaje': 'Locatario no encontrado'})
 

@@ -2,8 +2,8 @@ from django import forms
 from .models import Persona
 
 # Widgets Classes
-widget_text = forms.TextInput(attrs={'class': 'form-control'})
-widget_dni = forms.TextInput(attrs={'class': 'form-control', 'list': 'persons_list'})
+widget_text = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
+widget_dni = forms.TextInput(attrs={'class': 'form-control', 'list': 'persons_list', 'autocomplete': 'off'})
 
 # Create your forms here.
 class PersonaForm(forms.ModelForm):
