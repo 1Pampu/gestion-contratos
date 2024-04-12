@@ -20,3 +20,12 @@ def agregar_actualizar_persona(request):
     else:
         form = PersonaForm()
     return False, form
+
+def verificar_persona(persona):
+    if persona:
+        try:
+            persona = Persona.objects.get(dni=persona)
+            return True
+        except Persona.DoesNotExist:
+            return False
+    return False

@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect
 from .models import Contrato, Inmueble
 from .forms import ContratoForm
 from .utils import autocompletar_docx, numero_a_texto, fecha_a_texto
+from django.urls import reverse
 from django.utils import timezone
-from personas.utils import agregar_actualizar_persona
+from personas.utils import agregar_actualizar_persona, verificar_persona
 
 
 # Create your views here.
@@ -74,7 +75,9 @@ def descargar_contrato(request, id_contrato):
 def nuevo_contrato_locador(request):
     valid, form = agregar_actualizar_persona(request)
     if valid:
-        return redirect('nuevo_contrato_locatario')
+        dni_locador = form.cleaned_data['dni']
+        url = reverse('nuevo_contrato_locatario') + f'?locador={dni_locador}'
+        return redirect(url)
 
     context = {
         'form': form,
@@ -84,9 +87,13 @@ def nuevo_contrato_locador(request):
     return render(request, 'contratos/nuevo_contrato/personas.html', context)
 
 def nuevo_contrato_locatario(request):
+    dni_locador = request.GET.get('locador')
+    if not verificar_persona(dni_locador):
+        return render(request, 'global/errors.html', {'error': 404, 'mensaje': 'Locador no encontrado'})
+
     valid, form = agregar_actualizar_persona(request)
     if valid:
-        return redirect('index') #! CAMBIAR CUANDO ESTE LISTO GARANTE
+        return redirect('index')        #! FALTA ESTOOO!!!!!
 
     context = {
         'form': form,
