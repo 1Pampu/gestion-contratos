@@ -8,6 +8,7 @@ class Inmueble(models.Model):
     ciudad = models.CharField(max_length=50)
     num_partida = models.CharField(max_length=15)
     composicion = models.TextField(max_length=500)
+    condicion = models.TextField(max_length=2000)
 
     def __str__(self):
         return self.num_partida
@@ -17,7 +18,6 @@ class Contrato(models.Model):
     locatario = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='contratos_locatario')
     garantia = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='contratos_garantia')
     inmueble = models.ForeignKey(Inmueble, on_delete=models.CASCADE)
-    condicion = models.TextField(max_length=2000)
     fecha_inicio = models.DateField()
     duracion = models.IntegerField()
     fecha_finalizacion = models.DateField(null=True, blank=True)

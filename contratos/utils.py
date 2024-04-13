@@ -3,6 +3,7 @@ from docx import Document
 from django.http import HttpResponse
 from num2words import num2words
 import locale
+from personas.utils import verificar_persona
 
 def autocompletar_docx(template_path, datos):
     # Abrir el documento
@@ -39,3 +40,20 @@ def fecha_a_texto(date):
     string = date.strftime("%d de %B de ")
     anio = numero_a_texto(date.year)
     return string + anio
+
+def validaciones_contrato(request, validacion):
+    # VALIDACION    1            2           3
+    url = "?"
+    personas = ['locador', 'locatario', 'garantia']
+    for i in range(1, validacion + 1):
+        dni = request.GET.get(personas[i-1])
+        if not verificar_persona(dni):
+            return False, personas[i-1]
+        url += f'{personas[i-1]}={dni}&'
+        if i == validacion:
+            break
+
+    if validacion > 3:
+        pass  #! OTRAS VALIDACIONES
+
+    return True, url

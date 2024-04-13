@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Contrato, Inmueble
 from .forms import ContratoForm
-from .utils import autocompletar_docx, numero_a_texto, fecha_a_texto
+from .utils import autocompletar_docx, numero_a_texto, fecha_a_texto, validaciones_contrato
 from django.urls import reverse
 from django.utils import timezone
 from personas.utils import agregar_actualizar_persona, verificar_persona
@@ -87,14 +87,14 @@ def nuevo_contrato_locador(request):
     return render(request, 'contratos/nuevo_contrato/personas.html', context)
 
 def nuevo_contrato_locatario(request):
-    dni_locador = request.GET.get('locador')
-    if not verificar_persona(dni_locador):
-        return render(request, 'global/errors.html', {'error': 404, 'mensaje': 'Locador no encontrado'})
+    valid, url_or_error = validaciones_contrato(request, 1)
+    if not valid:
+        return render(request, 'global/errors.html', {'error': 404, 'mensaje': f'{url_or_error.capitalize()} no encontrado'})
 
     valid, form = agregar_actualizar_persona(request)
     if valid:
         dni_locatario = form.cleaned_data['dni']
-        url = reverse('nuevo_contrato_garantia') + f'?locador={dni_locador}&locatario={dni_locatario}'
+        url = reverse('nuevo_contrato_garantia') + url_or_error + f'locatario={dni_locatario}'
         return redirect(url)
 
     context = {
@@ -105,6 +105,26 @@ def nuevo_contrato_locatario(request):
     return render(request, 'contratos/nuevo_contrato/personas.html', context)
 
 def nuevo_contrato_garantia(request):
+    valid, url_or_error = validaciones_contrato(request, 2)
+    if not valid:
+        return render(request, 'global/errors.html', {'error': 404, 'mensaje': f'{url_or_error.capitalize()} no encontrado'})
+
+    valid, form = agregar_actualizar_persona(request)
+    if valid:
+        dni_garantia = form.cleaned_data['dni']
+        url = reverse('nuevo_contrato_inmueble') + url_or_error + f'garantia={dni_garantia}'
+        return redirect(url)
+
+    context = {
+        'form': form,
+        'page': 'nuevo_contrato',
+        'title': 'Garantia',
+    }
+    return render(request, 'contratos/nuevo_contrato/personas.html', context)
+
+# ! CONTINUAR ACA
+def nuevo_contrato_inmueble(request):
+    #! PONER VALIDACIONES NUEVAS
     dni_locador = request.GET.get('locador')
     if not verificar_persona(dni_locador):
         return render(request, 'global/errors.html', {'error': 404, 'mensaje': 'Locador no encontrado'})
@@ -113,18 +133,11 @@ def nuevo_contrato_garantia(request):
     if not verificar_persona(dni_locatario):
         return render(request, 'global/errors.html', {'error': 404, 'mensaje': 'Locatario no encontrado'})
 
-    valid, form = agregar_actualizar_persona(request)
-    if valid:
-        dni_garantia = form.cleaned_data['dni']
-        url = reverse('index') + f'?locador={dni_locador}&locatario={dni_locatario}&garantia={dni_garantia}'
-        return redirect(url)        #! FALTA ESTOOO!!!!!
+    dni_garantia = request.GET.get('garantia')
+    if not verificar_persona(dni_garantia):
+        return render(request, 'global/errors.html', {'error': 404, 'mensaje': 'Garantia no encontrada'})
 
-    context = {
-        'form': form,
-        'page': 'nuevo_contrato',
-        'title': 'Garantia',
-    }
-    return render(request, 'contratos/nuevo_contrato/personas.html', context)
+
 
 
 # def nuevo_contrato(request):
