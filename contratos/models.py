@@ -1,18 +1,9 @@
 from django.db import models
 from datetime import timedelta
 from personas.models import Persona
+from inmuebles.models import Inmueble
 
 # Create your models here.
-class Inmueble(models.Model):
-    direccion = models.CharField(max_length=200)
-    ciudad = models.CharField(max_length=50)
-    num_partida = models.CharField(max_length=15)
-    composicion = models.TextField(max_length=500)
-    condicion = models.TextField(max_length=2000)
-
-    def __str__(self):
-        return self.num_partida
-
 class Contrato(models.Model):
     locador = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='contratos_locador')
     locatario = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='contratos_locatario')

@@ -1,12 +1,13 @@
 from django import forms
-from .models import Persona, Inmueble
+from personas.models import Persona
+from inmuebles.models import Inmueble
 
 # Widgets Classes
-widget_select = forms.Select(attrs={'required': 'required', 'class': 'form-select'})
-widget_text = forms.TextInput(attrs={'class': 'form-control'})
-widget_textarea = forms.Textarea(attrs={'class': 'form-control', 'rows': '3'})
-widget_integer = forms.NumberInput(attrs={'class': 'form-control'})
-widget_date = forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
+widget_select = forms.Select(attrs={'required': 'required', 'class': 'form-select', 'autocomplete': 'off'})
+widget_text = forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
+widget_textarea = forms.Textarea(attrs={'class': 'form-control', 'rows': '3', 'autocomplete': 'off'})
+widget_integer = forms.NumberInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
+widget_date = forms.DateInput(attrs={'type': 'date', 'class': 'form-control', 'autocomplete': 'off'})
 
 # Create your forms here.
 class ContratoForm(forms.Form):

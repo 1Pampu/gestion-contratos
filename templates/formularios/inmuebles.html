@@ -1,0 +1,121 @@
+<form action="" method='POST'>
+    {% csrf_token %}
+    <div class="row g-1">
+        <div class="col-md-2">
+            <label class="form-label" for="{{form.num_partida.id_for_label}}" >Nº de Partida:</label>
+            {{form.num_partida}}
+            <datalist id='partidas_list'></datalist>
+        </div>
+        <div class="col-md-5">
+            <label class="form-label" for="{{form.direccion.id_for_label}}">Direccion:</label>
+            {{form.direccion}}
+        </div>
+        <div class="col-md-5">
+            <label class="form-label" for="{{form.ciudad.id_for_label}}">Ciudad:</label>
+            {{form.ciudad}}
+        </div>
+        <div class="col-12">
+            <label class="form-label" for="{{form.composicion.id_for_label}}">Composicion del Inmueble:</label>
+            {{form.composicion}}
+        </div>
+        <div class="col-12 mt-2">
+            <label class="form-label" for="{{form.condicion.id_for_label}}">Condicion del Inmueble:</label>
+            {{form.condicion}}
+        </div>
+    </div>
+    <div class="mt-2" style="color:red; font-size: 13px">
+        {{form.errors}}
+    </div>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5 mt-5">
+        <a class="btn btn-secondary" href="{% url 'index' %}">Volver</a>
+        <button class="btn btn-success me-md-2" type="submit">Siguiente</button>
+    </div>
+</form>
+
+<script>
+    var lastMatch = false
+    function debounce(funcion, delay = 500){
+        let timer;
+        return function(){
+            if (timer){
+                clearTimeout(timer);
+            }
+            const context = this;
+            const args = arguments;
+            timer = setTimeout(() => {
+                funcion.apply(context, args);
+            }, delay);
+        }
+    }
+
+    function buscar_partida(num_partida){
+        var formData = new FormData();
+        formData.append('num_partida', num_partida);
+        const url = '{% url "buscar_inmueble" %}';
+        const options = {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': '{{csrf_token}}'
+            }
+        }
+
+        fetch(url, options)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error Fatal');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (Array.isArray(data.inmueble)){
+                lastMatch = false;
+                add_inmuebles_to_list(data.inmueble);
+            } else if (typeof data.inmueble === 'object' && !Array.isArray(data.inmueble) && data.inmueble !== null) {
+                add_inmueble_to_form(data.inmueble);
+                lastMatch = true;
+            } else {
+                console.log('No hay coincidencias');
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }
+
+    const buscar_inmueble_debounced = debounce(buscar_partida, 650);
+
+    var partidaField = document.getElementById('id_num_partida');
+    var sugerencias = document. getElementById('partidas_list');
+    partidaField.addEventListener('input', function(){
+        sugerencias.innerHTML = '';
+        if (lastMatch){
+            clear();
+        }
+        if (partidaField.value.length >= 2){
+            buscar_inmueble_debounced(partidaField.value);
+        }
+    });
+
+    function add_inmuebles_to_list(inmuebles){
+        for (let i = 0; i < inmuebles.length; i++){
+            var option = document.createElement('option');
+            option.value = inmuebles[i];
+            document.getElementById('partidas_list').appendChild(option);
+        }
+    }
+
+    function add_inmueble_to_form(inmueble){
+        document.getElementById('id_direccion').value = inmueble.direccion;
+        document.getElementById('id_ciudad').value = inmueble.ciudad;
+        document.getElementById('id_composicion').value = inmueble.composicion;
+        document.getElementById('id_condicion').value = inmueble.condicion;
+    }
+
+    function clear(){
+        document.getElementById('id_direccion').value = '';
+        document.getElementById('id_ciudad').value = '';
+        document.getElementById('id_composicion').value = '';
+        document.getElementById('id_condicion').value = '';
+    }
+</script>

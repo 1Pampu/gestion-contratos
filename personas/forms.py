@@ -8,13 +8,14 @@ widget_dni = forms.TextInput(attrs={'class': 'form-control', 'list': 'persons_li
 # Create your forms here.
 class PersonaForm(forms.ModelForm):
 
-    nombre = forms.CharField(widget=widget_text)
-    dni = forms.CharField(widget=widget_dni)
-    email = forms.EmailField(widget=widget_text)
-    celular = forms.CharField(widget=widget_text)
-    domicilio = forms.CharField(widget=widget_text)
-    ciudad = forms.CharField(widget=widget_text)
-
     class Meta:
         model = Persona
-        fields = ['nombre', 'dni', 'email', 'celular', 'domicilio', 'ciudad']
+        fields = '__all__'
+        widgets = {
+            'nombre': widget_text,
+            'dni': widget_dni,
+            'email': widget_text,
+            'celular': widget_text,
+            'domicilio': widget_text,
+            'ciudad': widget_text
+        }
