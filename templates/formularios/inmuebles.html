@@ -2,8 +2,8 @@
     {% csrf_token %}
     <div class="row g-1">
         <div class="col-md-2">
-            <label class="form-label" for="{{form.num_partida.id_for_label}}" >Nº de Partida:</label>
-            {{form.num_partida}}
+            <label class="form-label" for="{{form.partida.id_for_label}}" >Nº de Partida:</label>
+            {{form.partida}}
             <datalist id='partidas_list'></datalist>
         </div>
         <div class="col-md-5">
@@ -48,9 +48,9 @@
         }
     }
 
-    function buscar_partida(num_partida){
+    function buscar_partida(partida){
         var formData = new FormData();
-        formData.append('num_partida', num_partida);
+        formData.append('partida', partida);
         const url = '{% url "buscar_inmueble" %}';
         const options = {
             method: 'POST',
@@ -85,17 +85,33 @@
 
     const buscar_inmueble_debounced = debounce(buscar_partida, 650);
 
-    var partidaField = document.getElementById('id_num_partida');
+    var partidaField = document.getElementById('id_partida');
     var sugerencias = document. getElementById('partidas_list');
     partidaField.addEventListener('input', function(){
         sugerencias.innerHTML = '';
         if (lastMatch){
             clear();
         }
-        if (partidaField.value.length >= 2){
+        if (partidaField.value.length >= 3){
             buscar_inmueble_debounced(partidaField.value);
         }
+        formatNumberInput();
     });
+
+    function formatNumberInput() {
+        const inputNumero = document.getElementById('id_partida');
+        let valor = inputNumero.value.replace(/\D/g, ''); // Eliminar todos los caracteres no numéricos
+        let valorFormateado = '';
+
+        for (let i = 0; i < valor.length; i++) {
+            if (i === 3 || i === 9) {
+                valorFormateado += '-';
+            }
+            valorFormateado += valor.charAt(i);
+        }
+
+        inputNumero.value = valorFormateado;
+    }
 
     function add_inmuebles_to_list(inmuebles){
         for (let i = 0; i < inmuebles.length; i++){

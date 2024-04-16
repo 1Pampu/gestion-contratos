@@ -128,7 +128,7 @@ def nuevo_contrato_inmueble(request):
 
     valid, form = agregar_actualizar_inmueble(request)
     if valid:
-        num_partida = form.cleaned_data['num_partida']
+        num_partida = form.cleaned_data['partida']
         url = reverse('index') + url_or_error + f'inmueble={num_partida}'  # ! CAMBIAR ESTO
         return redirect(url)
 
@@ -139,7 +139,10 @@ def nuevo_contrato_inmueble(request):
     }
     return render(request, 'contratos/nuevo_contrato/inmueble.html', context)
 
-
+def nuevo_contrato_final(request):
+    valid, url_or_error = validaciones_contrato(request, 4)
+    if not valid:
+        return render(request, 'global/errors.html', {'error': 404, 'mensaje': f'{url_or_error.capitalize()} no encontrado'})
 
 
 

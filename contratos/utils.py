@@ -53,7 +53,10 @@ def validaciones_contrato(request, validacion):
         if i == validacion:
             break
 
-    if validacion > 3:
+    if validacion == 4:
+        partida = request.GET.get('inmueble')
+        # if not verificar_inmueble(partida):
+        return False, "inmueble"
         pass  #! OTRAS VALIDACIONES
 
     return True, url

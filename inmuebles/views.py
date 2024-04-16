@@ -2,16 +2,18 @@ from django.shortcuts import render
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 from .models import Inmueble
+from .utils import formatear_partida
 
 # Create your views here.
 @require_POST
 def buscar_inmueble(request):
-    partida = str(request.POST.get('num_partida',""))
+    partida = str(request.POST.get('partida',""))
+    partida = formatear_partida(partida)
 
-    if len(partida) >= 2:
-        inmuebles = Inmueble.objects.filter(num_partida__startswith = partida)
+    if partida >= 100:
+        inmuebles = Inmueble.objects.filter(partida__startswith = partida)
         if inmuebles:
-            if inmuebles[0].num_partida == partida:
+            if inmuebles[0].partida == partida:
                 informacion_inmueble = {
                     'direccion': inmuebles[0].direccion,
                     'ciudad': inmuebles[0].ciudad,
@@ -20,7 +22,7 @@ def buscar_inmueble(request):
                 }
                 return JsonResponse({'inmueble': informacion_inmueble})
 
-            partidas_inmuebles = list(inmuebles.values_list('num_partida', flat=True))
+            partidas_inmuebles = [str(inmueble) for inmueble in inmuebles]
             return JsonResponse({'inmueble': partidas_inmuebles})
 
     return JsonResponse({'Error': 'No se ha encontrado el inmueble'})

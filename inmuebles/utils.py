@@ -3,20 +3,31 @@ from .models import Inmueble
 
 def agregar_actualizar_inmueble(request):
     if request.method == 'POST':
-        form = InmuebleForm(request.POST)
+        request_updated = request.POST.copy()
+        partida = formatear_partida(request.POST.get('partida', ""))
+        request_updated.update({'partida': partida})
+        form = InmuebleForm(request_updated)
 
         if form.is_valid():
             form.save()
             return True, form
         else:
-            partida = request.POST.get('num_partida', "")
-            partida_existente = Inmueble.objects.filter(num_partida = partida).first()
+            partida_existente = Inmueble.objects.filter(partida = partida).first()
             if partida_existente:
-                form = InmuebleForm(request.POST, instance = partida_existente)
+                form = InmuebleForm(request_updated, instance = partida_existente)
                 if form.is_valid():
                     form.save()
-
                     return True, form
     else:
         form = InmuebleForm()
     return False, form
+
+def verificar_inmueble(request):
+    pass
+
+def formatear_partida(partida):
+    try:
+        formated = int(partida.replace("-", ""))
+    except ValueError:
+        return 0
+    return formated
