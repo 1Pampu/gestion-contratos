@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from num2words import num2words
 import locale
 from personas.utils import verificar_persona
+from inmuebles.utils import verificar_inmueble
 
 def autocompletar_docx(template_path, datos):
     # Abrir el documento
@@ -55,8 +56,8 @@ def validaciones_contrato(request, validacion):
 
     if validacion == 4:
         partida = request.GET.get('inmueble')
-        # if not verificar_inmueble(partida):
-        return False, "inmueble"
-        pass  #! OTRAS VALIDACIONES
+        if not verificar_inmueble(partida):
+            return False, "inmueble"
+        url += f'inmueble={partida}'
 
     return True, url

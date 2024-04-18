@@ -22,8 +22,14 @@ def agregar_actualizar_inmueble(request):
         form = InmuebleForm()
     return False, form
 
-def verificar_inmueble(request):
-    pass
+def verificar_inmueble(partida):
+    if partida:
+        try:
+            inmueble = Inmueble.objects.get(partida=partida)
+            return True
+        except Inmueble.DoesNotExist:
+            return False
+    return False
 
 def formatear_partida(partida):
     try:
