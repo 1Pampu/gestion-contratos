@@ -11,7 +11,7 @@
                 {% for contrato in contratos %}
                     <tr>
                         <td>{{ contrato.locador.nombre }}</td>
-                        <td>{{ contrato.inmueble.num_partida }}</td>
+                        <td>{{ contrato.inmueble }}</td>
                         <td>{{ contrato.locatario.nombre }}</td>
                         <td>{{ contrato.fecha_finalizacion }}</td>
                         <td><a href='{% url "resumen_contrato" id_contrato=contrato.id %}'>Ver</td>

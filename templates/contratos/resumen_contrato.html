@@ -94,7 +94,7 @@
         <div class="row g-1">
             <div class="col-md-2">
                 <label class="form-label">Nº de Partida:</label>
-                <input class="form-control" type="text" value="{{contrato.inmueble.num_partida}}" disabled readonly>
+                <input class="form-control" type="text" value="{{contrato.inmueble}}" disabled readonly>
             </div>
             <div class="col-md-5">
                 <label class="form-label">Direccion:</label>
@@ -110,7 +110,7 @@
             </div>
             <div class="col-12">
                 <label class="form-label">Condicion del Inmueble:</label>
-                <textarea class="form-control" disabled readonly style="height: 230px;">{{contrato.condicion}}</textarea>
+                <textarea class="form-control" disabled readonly style="height: 230px;">{{contrato.inmueble.condicion}}</textarea>
             </div>
         </div>
         <hr>

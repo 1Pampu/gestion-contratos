@@ -37,3 +37,7 @@ def formatear_partida(partida):
     except ValueError:
         return 0
     return formated
+
+def getInmueble(PK):
+    inmueble = Inmueble.objects.get(id = PK)
+    return inmueble

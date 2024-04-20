@@ -19,6 +19,7 @@ def run_server():
     execute_from_command_line(["manage.py", "makemigrations"])
     execute_from_command_line(["manage.py", "makemigrations", "contratos"])
     execute_from_command_line(["manage.py", "makemigrations", "personas"])
+    execute_from_command_line(["manage.py", "makemigrations", "inmuebles"])
     execute_from_command_line(["manage.py", "migrate"])
 
     # Crear superusuario si la base de datos es nueva

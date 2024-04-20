@@ -29,3 +29,7 @@ def verificar_persona(persona):
         except Persona.DoesNotExist:
             return False
     return False
+
+def getPersona(PK):
+    persona = Persona.objects.get(id = PK)
+    return persona

@@ -5,10 +5,10 @@ from inmuebles.models import Inmueble
 
 # Create your models here.
 class Contrato(models.Model):
-    locador = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='contratos_locador')
-    locatario = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='contratos_locatario')
-    garantia = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='contratos_garantia')
-    inmueble = models.ForeignKey(Inmueble, on_delete=models.CASCADE)
+    locador = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='contratos_locador', null=True, blank=True)
+    locatario = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='contratos_locatario', null=True, blank=True)
+    garantia = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='contratos_garantia', null=True, blank=True)
+    inmueble = models.ForeignKey(Inmueble, on_delete=models.CASCADE, null=True, blank=True)
     fecha_inicio = models.DateField()
     duracion = models.IntegerField()
     fecha_finalizacion = models.DateField(null=True, blank=True)
