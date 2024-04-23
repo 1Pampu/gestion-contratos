@@ -33,3 +33,6 @@ include/
 
 # Migrations
 migrations/
+
+# Extras
+/documents/contratos/

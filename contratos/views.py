@@ -1,19 +1,17 @@
 from django.shortcuts import render, redirect
-from .models import Contrato
-from .forms import ContratoForm
-from .utils import autocompletar_docx, numero_a_texto, fecha_a_texto, validaciones_contrato
 from django.urls import reverse
 from django.utils import timezone
+from .models import Contrato
+from .forms import ContratoForm
+from .utils import autocompletar_docx, validaciones_contrato
+from django.http import HttpResponse
 from personas.utils import agregar_actualizar_persona, getPersona
 from inmuebles.utils import agregar_actualizar_inmueble, getInmueble
 
-
 # Create your views here.
 def index(request):
-    # Filtrar los contratos que ya finalizaron y conservar los vigentes
     contratos_activos = Contrato.objects.filter(fecha_finalizacion__gt = timezone.now()).order_by('-id')
 
-    # Pasar los contratos a la plantilla
     context = {
         'contratos': contratos_activos,
         'page': 'index'
@@ -31,7 +29,10 @@ def resumen_contrato(request, id_contrato):
 def descargar_contrato(request, id_contrato):
     contrato = Contrato.objects.get(pk = id_contrato)
 
-    response = autocompletar_docx('static/documents/plantilla_contratos.docx', contrato)
+    with open(contrato.docx.path, 'rb') as doc:
+        doc = doc.read()
+    response = HttpResponse(doc, content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+    response['Content-Disposition'] = f'attachment; filename={contrato.docx.name}'
     return response
 
 def nuevo_contrato_locador(request):
@@ -117,6 +118,7 @@ def nuevo_contrato_final(request):
             contrato.garantia = getPersona(request.GET.get('garantia'))
             contrato.inmueble = getInmueble(request.GET.get('inmueble'))
             contrato.save()
+            autocompletar_docx(contrato)
             return redirect('resumen_contrato', id_contrato=contrato.id)
 
     context = {

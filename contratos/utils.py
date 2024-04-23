@@ -1,14 +1,14 @@
 from io import BytesIO
-from docx import Document
-from django.http import HttpResponse
+from docxtpl import DocxTemplate
+from django.core.files.base import ContentFile
 from num2words import num2words
 import locale
 from personas.utils import verificar_persona
 from inmuebles.utils import verificar_inmueble
 
-def autocompletar_docx(template_path, contrato):
+def autocompletar_docx(contrato):
     # Abrir el documento
-    doc = Document(template_path)
+    doc = DocxTemplate("documents/plantillas/plantilla_contratos.docx")
 
     datos = {
         # Locador Info
@@ -40,6 +40,7 @@ def autocompletar_docx(template_path, contrato):
         'ciudad_inmueble' : contrato.inmueble.ciudad,
         'num_partida' : contrato.inmueble,
         'composicion_inmueble' : contrato.inmueble.composicion,
+        'condicion_inmueble' : contrato.inmueble.condicion,
 
         # Contrato Info
         'fecha_inicio' : fecha_a_texto(contrato.fecha_inicio),
@@ -47,15 +48,8 @@ def autocompletar_docx(template_path, contrato):
         'duracion_str' : numero_a_texto(contrato.duracion),
     }
 
-    # Iterar sobre los párrafos del documento
-    for paragraph in doc.paragraphs:
-        for key, value in datos.items():
-            # Reemplazar el texto entre corchetes con los datos proporcionados
-            if f"[{key}]" in paragraph.text:
-                run_list = paragraph.runs
-                for run in run_list:
-                    if f"[{key}]" in run.text:
-                        run.text = run.text.replace(f"[{key}]", str(value))
+    # Completar el documento con los datos
+    doc.render(datos)
 
     # Guardar el documento en un buffer de BytesIO
     buffer = BytesIO()
@@ -64,10 +58,9 @@ def autocompletar_docx(template_path, contrato):
 
     num_partida = datos['num_partida']
     # Crear una respuesta HTTP para el archivo descargable
-    response = HttpResponse(buffer.read(), content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
-    response['Content-Disposition'] = f'attachment; filename=CONTRATO DE LOCACIÓN {num_partida}.docx'
+    contrato.docx.save(f'CONTRATO_DE_LOCACIÓN_{num_partida}_{contrato.id}.docx', ContentFile(buffer.read()))
 
-    return response
+    return contrato
 
 def numero_a_texto(numero):
     texto = num2words(numero, lang='es')

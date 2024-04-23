@@ -39,5 +39,5 @@ def formatear_partida(partida):
     return formated
 
 def getInmueble(PK):
-    inmueble = Inmueble.objects.get(id = PK)
+    inmueble = Inmueble.objects.get(partida = PK)
     return inmueble

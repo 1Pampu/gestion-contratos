@@ -31,5 +31,5 @@ def verificar_persona(persona):
     return False
 
 def getPersona(PK):
-    persona = Persona.objects.get(id = PK)
+    persona = Persona.objects.get(dni = PK)
     return persona
