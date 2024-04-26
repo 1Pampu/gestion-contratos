@@ -26,3 +26,12 @@ def buscar_inmueble(request):
             return JsonResponse({'inmueble': partidas_inmuebles})
 
     return JsonResponse({'Error': 'No se ha encontrado el inmueble'})
+
+def inmuebles(request):
+    inmuebles = Inmueble.objects.all()
+
+    context = {
+        "inmuebles": inmuebles,
+        "page": "datos"
+    }
+    return render(request, 'inmuebles/list_inmuebles.html', context)

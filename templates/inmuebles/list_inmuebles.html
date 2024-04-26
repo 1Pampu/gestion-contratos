@@ -1,0 +1,22 @@
+{% extends "global/base.html" %}
+
+{% block main %}
+    <div class="mx-auto p-2" style="width: 1000px;">
+        <h1 class="text-center mt-2 mb-3">Inmuebles</h1>
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr><th>Partida</th><th>Dirección</th><th>Ciudad</th><th></th></tr>
+            </thead>
+            <tbody>
+                {% for inmueble in inmuebles %}
+                    <tr>
+                        <td>{{ inmueble }}</td>
+                        <td>{{ inmueble.direccion }}</td>
+                        <td>{{ inmueble.ciudad }}</td>
+                        {% comment %} <td><a href='{% url "resumen_contrato" id_contrato=contrato.id %}'>Ver</td> {% endcomment %}
+                        <td>VER</td>
+                    </tr>
+                {% endfor %}
+        </table>
+    </div>
+{% endblock %}

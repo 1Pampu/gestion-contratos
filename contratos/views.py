@@ -32,7 +32,7 @@ def descargar_contrato(request, id_contrato):
     with open(contrato.docx.path, 'rb') as doc:
         doc = doc.read()
     response = HttpResponse(doc, content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
-    response['Content-Disposition'] = f'attachment; filename={contrato.docx.name}'
+    response['Content-Disposition'] = f'attachment; filename=Contrato De Locacion {contrato.inmueble} {contrato.fecha_inicio.strftime("%d-%m-%Y")}.docx'
     return response
 
 def nuevo_contrato_locador(request):
