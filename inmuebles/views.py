@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
+from contratos.models import Contrato
 from .models import Inmueble
 from .utils import formatear_partida
 from .forms import InmuebleForm
@@ -48,8 +49,10 @@ def detalle_inmueble(request, partida):
     else:
         form = InmuebleForm(instance = inmueble)
 
+    contratos = Contrato.objects.filter(inmueble = inmueble)
     context= {
         'inmueble': inmueble,
-        'form': form
+        'form': form,
+        'contratos': contratos
     }
     return render(request, 'inmuebles/detalle_inmueble.html', context)

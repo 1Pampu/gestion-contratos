@@ -4,7 +4,39 @@
 <div class="mx-auto p-2" style="width: 1000px;">
     <h1 class="text-center mt-2 mb-3">Detalle de Inmueble</h1>
     {% include "inmuebles/editar_inmueble.html" %}
+
     <h2>Contratos asociados</h2>
+    {% if not contratos %}
+        <p>Este inmueble no tiene asociado ningun contrato!</p>
+    {% else %}
+        <div class="mt-3">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Fecha Inicio</th>
+                        <th scope="col">Fecha Fin</th>
+                        <th scope="col">Locador</th>
+                        <th scope="col">Locatario</th>
+                        <th scope="col" style="text-align: center;">Detalle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for contrato in contratos %}
+                        <tr>
+                            <td>{{ contrato.fecha_inicio }}</td>
+                            <td>{{ contrato.fecha_finalizacion }}</td>
+                            <td>{{ contrato.locador.nombre }}</td>
+                            <td>{{ contrato.locatario.nombre }}</td>
+                            <td style="text-align: center;">
+                                <a href="{% url 'resumen_contrato' contrato.id %}" > Ver</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
     <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5 mt-5">
         <a class="btn btn-secondary" href="{% url 'lista_inmuebles' %}">Volver</a>
     </div>
