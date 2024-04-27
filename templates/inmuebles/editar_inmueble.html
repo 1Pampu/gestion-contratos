@@ -1,0 +1,46 @@
+<form action="" method='POST'>
+    {% csrf_token %}
+    <div class="row g-1">
+        <div class="col-md-2">
+            <label class="form-label" for="{{form.partida.id_for_label}}" >Nº de Partida:</label>
+            <input type="text" name="partida" value="{{inmueble}}" class="form-control" list="partidas_list" autocomplete="off"
+            pattern="[0-9]{3}-[0-9]{6}-[0-9]{1}" title="El número de partida debe tener el formato: xxx-xxxxxx-x" maxlength="12" required="" id="id_partida" disabled>
+        </div>
+        <div class="col-md-5">
+            <label class="form-label" for="{{form.direccion.id_for_label}}">Direccion:</label>
+            <input type="text" name="direccion" value="{{inmueble.direccion}}" class="form-control" autocomplete="off" maxlength="200" required="" id="id_direccion" disabled>
+        </div>
+        <div class="col-md-5">
+            <label class="form-label" for="{{form.ciudad.id_for_label}}">Ciudad:</label>
+            <input type="text" name="ciudad" value="{{inmueble.ciudad}}" class="form-control" autocomplete="off" maxlength="50" required="" id="id_ciudad" disabled>
+        </div>
+        <div class="col-12">
+            <label class="form-label" for="{{form.composicion.id_for_label}}">Composicion del Inmueble:</label>
+            <textarea name="composicion" cols="40" rows="3" class="form-control" autocomplete="off" maxlength="500" required="" id="id_composicion" disabled>{{inmueble.composicion}}</textarea>
+        </div>
+        <div class="col-12 mt-2">
+            <label class="form-label" for="{{form.condicion.id_for_label}}">Condicion del Inmueble:</label>
+            <textarea name="condicion" cols="40" rows="3" class="form-control" autocomplete="off" maxlength="2000" required="" id="id_condicion" disabled>{{inmueble.condicion}}</textarea>
+        </div>
+    </div>
+    <div class="mt-2" style="color:red; font-size: 13px">
+        {{form.errors}}
+    </div>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5 mt-5">
+        <button class="btn btn-primary me-md-2" type="button" onclick="alter_button()">Editar</button>
+        <button class="btn btn-success me-md-2" type="submit" style="display:none">Guardar</button>
+    </div>
+</form>
+
+<script>
+    function alter_button(){
+        document.getElementById('id_partida').disabled = false;
+        document.getElementById('id_partida').readOnly = true;
+        document.getElementById('id_direccion').disabled = false;
+        document.getElementById('id_ciudad').disabled = false;
+        document.getElementById('id_composicion').disabled = false;
+        document.getElementById('id_condicion').disabled = false;
+        document.getElementsByTagName('button')[0].style.display = 'none';
+        document.getElementsByTagName('button')[1].style.display = 'block';
+    }
+</script>

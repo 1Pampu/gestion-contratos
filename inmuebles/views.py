@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 from .models import Inmueble
 from .utils import formatear_partida
+from .forms import InmuebleForm
 
 # Create your views here.
 @require_POST
@@ -35,3 +36,20 @@ def inmuebles(request):
         "page": "datos"
     }
     return render(request, 'inmuebles/list_inmuebles.html', context)
+
+def detalle_inmueble(request, partida):
+    inmueble = get_object_or_404(Inmueble, partida = partida)
+    if request.method == 'POST':
+        request_updated = request.POST.copy()
+        request_updated.update({'partida': partida})
+        form = InmuebleForm(request_updated, instance = inmueble)
+        if form.is_valid():
+            form.save()
+    else:
+        form = InmuebleForm(instance = inmueble)
+
+    context= {
+        'inmueble': inmueble,
+        'form': form
+    }
+    return render(request, 'inmuebles/detalle_inmueble.html', context)

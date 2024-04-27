@@ -13,8 +13,7 @@
                         <td>{{ inmueble }}</td>
                         <td>{{ inmueble.direccion }}</td>
                         <td>{{ inmueble.ciudad }}</td>
-                        {% comment %} <td><a href='{% url "resumen_contrato" id_contrato=contrato.id %}'>Ver</td> {% endcomment %}
-                        <td>VER</td>
+                        <td><a href='{% url "detalle_inmueble" partida=inmueble.partida %}'>Ver</a></td>
                     </tr>
                 {% endfor %}
         </table>
