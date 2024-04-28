@@ -1,0 +1,21 @@
+{% extends "global/base.html" %}
+
+{% block main %}
+    <div class="mx-auto p-2" style="width: 1000px;">
+        <h1 class="text-center mt-2 mb-3">Personas <a class="btn btn-success" href="{% url 'agregar_editar_persona' %}">Nuevo / Editar</a></h1>
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr><th>D.N.I.</th><th>Nombre</th><th>Celular</th><th></th></tr>
+            </thead>
+            <tbody>
+                {% for persona in personas %}
+                    <tr>
+                        <td>{{ persona }}</td>
+                        <td>{{ persona.nombre }}</td>
+                        <td>{{ persona.celular }}</td>
+                        <td style="text-align: center;"><a href='{% url "detalle_persona" dni=persona.dni %}'>Ver</a></td>
+                    </tr>
+                {% endfor %}
+        </table>
+    </div>
+{% endblock %}

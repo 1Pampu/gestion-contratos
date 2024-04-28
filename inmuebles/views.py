@@ -64,6 +64,6 @@ def agregar_editar_inmueble(request):
 
     context = {
         'form': form,
-        'page': 'inmuebles',
+        'page': 'datos',
     }
     return render(request, 'inmuebles/agregar_editar_inmueble.html', context)

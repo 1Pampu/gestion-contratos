@@ -1,0 +1,51 @@
+<form action="" method='POST'>
+    {% csrf_token %}
+    <div class="row g-1">
+        <div class="col-md-2">
+            <label for="{{form.dni.id_for_label}}" class="form-label">D.N.I.:</label>
+            <input type="text" name="dni" class="form-control" value="{{persona.dni}}" list="persons_list" autocomplete="off" required="" id="id_dni" disabled>
+            <datalist id='persons_list'></datalist>
+        </div>
+        <div class="col-10">
+            <label for="{{form.nombre.id_for_label}}" class="form-label">Nombre:</label>
+            <input type="text" name="nombre" class="form-control" value="{{persona.nombre}}" autocomplete="off" maxlength="100" required="" id="id_nombre" disabled>
+        </div>
+        <div class="col-md-6">
+            <label for="{{form.email.id_for_label}}" class="form-label">Email:</label>
+            <input type="text" name="email" class="form-control" value="{{persona.email}}" autocomplete="off" maxlength="75" required="" id="id_email" disabled>
+        </div>
+        <div class="col-md-6">
+            <label for="{{form.celular.id_for_label}}" class="form-label">Celular:</label>
+            <input type="text" name="celular" class="form-control" value="{{persona.celular}}" autocomplete="off" maxlength="18" required="" id="id_celular" disabled>
+        </div>
+        <div class="col-md-6">
+            <label for="{{form.domicilio.id_for_label}}" class="form-label">Domicilio:</label>
+            <input type="text" name="domicilio" class="form-control" value="{{persona.domicilio}}" autocomplete="off" maxlength="200" required="" id="id_domicilio" disabled>
+        </div>
+        <div class="col-md-6">
+            <label for="{{form.ciudad.id_for_label}}" class="form-label">Ciudad:</label>
+            <input type="text" name="ciudad" class="form-control" value="{{persona.ciudad}}" autocomplete="off" maxlength="50" required="" id="id_ciudad" disabled>
+        </div>
+    </div>
+    <div class="mt-2" style="color:red; font-size: 13px">
+        {{form.errors}}
+    </div>
+    <div class="d-grid d-md-flex justify-content-md-end mt-5">
+        <button class="btn btn-primary" type="button" onclick="alter_button()">Editar</button>
+        <button class="btn btn-success" type="submit" style="display:none">Guardar</button>
+    </div>
+</form>
+
+<script>
+    function alter_button(){
+        document.getElementById('id_dni').disabled = false;
+        document.getElementById('id_dni').readOnly = true;
+        document.getElementById('id_nombre').disabled = false;
+        document.getElementById('id_email').disabled = false;
+        document.getElementById('id_celular').disabled = false;
+        document.getElementById('id_domicilio').disabled = false;
+        document.getElementById('id_ciudad').disabled = false;
+        document.getElementsByTagName('button')[0].style.display = 'none';
+        document.getElementsByTagName('button')[1].style.display = 'block';
+    }
+</script>

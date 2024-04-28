@@ -11,4 +11,5 @@ class Persona(models.Model):
     ciudad = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.dni
+        dni_con_puntos = '{:,}'.format(int(self.dni)).replace(',', '.')
+        return dni_con_puntos
