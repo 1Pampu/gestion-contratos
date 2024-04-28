@@ -2,7 +2,7 @@
 
 {% block main %}
     <div class="mx-auto p-2" style="width: 1000px;">
-        <h1 class="text-center mt-2 mb-3">Inmuebles</h1>
+        <h1 class="text-center mt-2 mb-3">Inmuebles <a class="btn btn-success" href="{% url 'agregar_editar_inmueble' %}">Nuevo / Editar</a></h1>
         <table class="table table-bordered">
             <thead class="table-dark">
                 <tr><th>Partida</th><th>Dirección</th><th>Ciudad</th><th></th></tr>
@@ -13,7 +13,7 @@
                         <td>{{ inmueble }}</td>
                         <td>{{ inmueble.direccion }}</td>
                         <td>{{ inmueble.ciudad }}</td>
-                        <td><a href='{% url "detalle_inmueble" partida=inmueble.partida %}'>Ver</a></td>
+                        <td style="text-align: center;"><a href='{% url "detalle_inmueble" partida=inmueble.partida %}'>Ver</a></td>
                     </tr>
                 {% endfor %}
         </table>

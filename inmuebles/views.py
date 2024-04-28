@@ -1,9 +1,9 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 from contratos.models import Contrato
 from .models import Inmueble
-from .utils import formatear_partida
+from .utils import formatear_partida, agregar_actualizar_inmueble
 from .forms import InmuebleForm
 
 # Create your views here.
@@ -56,3 +56,14 @@ def detalle_inmueble(request, partida):
         'contratos': contratos
     }
     return render(request, 'inmuebles/detalle_inmueble.html', context)
+
+def agregar_editar_inmueble(request):
+    valid, form = agregar_actualizar_inmueble(request)
+    if valid:
+        return redirect('detalle_inmueble', partida = form.cleaned_data['partida'])
+
+    context = {
+        'form': form,
+        'page': 'inmuebles',
+    }
+    return render(request, 'inmuebles/agregar_editar_inmueble.html', context)
