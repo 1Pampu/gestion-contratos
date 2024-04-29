@@ -130,7 +130,12 @@
                 <input class="form-control" type="date" value="{{contrato.fecha_finalizacion|date:'Y-m-d'}}" disabled readonly>
             </div>
         </div>
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5 mt-3">
+            <a class="btn btn-danger me-md-2" href="{% url 'archivar_contrato' id_contrato=contrato.id %}">{% if contrato.active == True %}
+                Archivar
+            {% else %}
+                Desarchivar
+            {% endif %}</a>
             <a class="btn btn-success me-md-2" href="{% url 'descargar_contrato' id_contrato=contrato.id %}">Descargar</a>
             <a class="btn btn-secondary" href="{% url 'index' %}">Volver</a>
         </div>

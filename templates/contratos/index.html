@@ -2,7 +2,11 @@
 
 {% block main %}
     <div class="mx-auto p-2" style="width: 1000px;">
-        <h1 class="text-center mt-2 mb-3">Contratos Activos</h1>
+        <h1 class="text-center mt-2 mb-3">Contratos {% if not page == "datos" %}
+            <a class="btn btn-success" href="{% url 'nuevo_contrato_locador' %}">Nuevo</a>
+        {% else %}
+            Archivados
+        {% endif %}</h1>
         <table class="table table-bordered">
             <thead class="table-dark">
                 <tr><th>Locador</th><th>Inmueble</th><th>Locatario</th><th>Finaliza</th><th></th></tr>

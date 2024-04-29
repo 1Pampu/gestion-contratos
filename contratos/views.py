@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.utils import timezone
 from .models import Contrato
 from .forms import ContratoForm
 from .utils import autocompletar_docx, validaciones_contrato
@@ -10,13 +9,31 @@ from inmuebles.utils import agregar_actualizar_inmueble, getInmueble
 
 # Create your views here.
 def index(request):
-    contratos_activos = Contrato.objects.filter(fecha_finalizacion__gt = timezone.now()).order_by('-id')
+    contratos = Contrato.objects.filter(active = True).order_by('-id')
 
     context = {
-        'contratos': contratos_activos,
+        'contratos': contratos,
         'page': 'index'
     }
     return render(request, 'contratos/index.html', context)
+
+def contratos_arhivados(request):
+    contratos = Contrato.objects.filter(active = False).order_by('-id')
+
+    context = {
+        'contratos': contratos,
+        'page': 'datos',
+    }
+    return render(request, 'contratos/index.html', context)
+
+def alternar_archivado(request, id_contrato):
+    contrato = Contrato.objects.get(pk = id_contrato)
+    if contrato.active:
+        contrato.active = False
+    else:
+        contrato.active = True
+    contrato.save()
+    return redirect('index')
 
 def resumen_contrato(request, id_contrato):
     contrato = Contrato.objects.get(pk = id_contrato)

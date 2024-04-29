@@ -2,10 +2,7 @@
   <div class="container-fluid">
     <ul class="nav nav-underline">
       <li class="nav-item">
-        <a class="nav-link {% if page == 'index' %}active{% endif %}" href="{% url 'index' %}">Inicio</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link {% if page == 'nuevo_contrato' %}active{% endif %}" href="{% url 'nuevo_contrato_locador' %}">Nuevo Contrato</a>
+        <a class="nav-link {% if page == 'index' %}active{% endif %}" href="{% url 'index' %}">Contratos</a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle {% if page == 'datos' %}active{% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -15,7 +12,7 @@
           <li><a class="dropdown-item" href="{% url 'lista_inmuebles' %}">Inmuebles</a></li>
           <li><a class="dropdown-item" href="{% url 'lista_personas' %}">Personas</a></li>
           <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="#">Something else here</a></li>
+          <li><a class="dropdown-item" href="{% url 'contratos_archivados' %}">Contratos Archivados</a></li>
         </ul>
       </li>
     </ul>
