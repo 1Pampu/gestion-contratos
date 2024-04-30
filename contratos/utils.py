@@ -58,7 +58,7 @@ def autocompletar_docx(contrato):
 
     num_partida = datos['num_partida']
     # Crear una respuesta HTTP para el archivo descargable
-    contrato.docx.save(f'CONTRATO_DE_LOCACIÓN_{num_partida}_{contrato.id}.docx', ContentFile(buffer.read()))
+    contrato.docx.save(f'Contrato de Locación {num_partida} ({contrato.fecha_inicio.strftime("%d-%m-%Y")}) {contrato.id}.docx', ContentFile(buffer.read()))
 
     return contrato
 

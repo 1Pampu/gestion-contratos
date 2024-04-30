@@ -2,6 +2,7 @@ from django.db import models
 from datetime import timedelta
 from personas.models import Persona
 from inmuebles.models import Inmueble
+import os
 
 # Create your models here.
 class Contrato(models.Model):
@@ -25,6 +26,13 @@ class Contrato(models.Model):
     def save(self, *args, **kwargs):
         self.fecha_finalizacion = self.calcular_fin()
         super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        if self.docx:
+            if os.path.isfile(self.docx.path):
+                os.remove(self.docx.path)
+
+        super().delete(*args, **kwargs)
 
     def __str__(self):
         return f'{self.locador} - {self.locatario} - {self.inmueble}'

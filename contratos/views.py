@@ -48,8 +48,11 @@ def descargar_contrato(request, id_contrato):
 
     with open(contrato.docx.path, 'rb') as doc:
         doc = doc.read()
+
+    nombre_archivo = contrato.docx.name.split('/')[-1]
+
     response = HttpResponse(doc, content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
-    response['Content-Disposition'] = f'attachment; filename=Contrato De Locacion {contrato.inmueble} {contrato.fecha_inicio.strftime("%d-%m-%Y")}.docx'
+    response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}"'
     return response
 
 def nuevo_contrato_locador(request):
@@ -134,6 +137,7 @@ def nuevo_contrato_final(request):
             contrato.locatario = getPersona(request.GET.get('locatario'))
             contrato.garantia = getPersona(request.GET.get('garantia'))
             contrato.inmueble = getInmueble(request.GET.get('inmueble'))
+            contrato.active = True
             contrato.save()
             autocompletar_docx(contrato)
             return redirect('resumen_contrato', id_contrato=contrato.id)
