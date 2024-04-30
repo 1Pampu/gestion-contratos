@@ -31,10 +31,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'configuraciones',
+    'dbbackup',
     'contratos',
     'personas',
     'inmuebles',
 ]
+
+# Database & Media Backup
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': BASE_DIR / 'backup'}
+
+# Media Configuration
+MEDIA_URL = '/documents/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'documents')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

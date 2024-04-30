@@ -1,0 +1,60 @@
+{% extends "global/base.html" %}
+
+{% block main %}
+    <div class="mx-auto p-2" style="width: 1000px;">
+        <h1 class="text-center mt-2 mb-3">Configuraciones</h1>
+        <div>
+            <h2>Backups</h2>
+            <div>
+                <p>Realizar un backup ahora</p>
+                {% comment %} <a href="{% url 'backup' %}" class="btn btn-primary">Realizar backup</a> {% endcomment %}
+                <button type="button" class="btn btn-primary mb-2" id="BackupAlertBtn" onclick="realizar_backup()">Realizar backup</button>
+                <div id="BackupAlertPlaceholder"></div>
+            </div>
+            <div>
+                <p>Lista de backups</p>
+                <a href="#" class="btn btn-primary">Ver Lista</a>
+            </div>
+            <div>
+                <p>Programar backups</p>
+                <a href="#" class="btn btn-primary">Programar</a>
+            </div>
+            <div>
+                <p>Restaurar base de datos a partir de un backup</p>
+                <a href="#" class="btn btn-primary">Restaurar</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ALERT MESSAGE REALIZAR BACKUP NOW
+        const alertPlaceholder = document.getElementById('BackupAlertPlaceholder')
+        const appendAlert = (message, type) => {
+            const wrapper = document.createElement('div')
+            wrapper.innerHTML = [
+                `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+                `   <div>${message}</div>`,
+                '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+                '</div>'
+            ].join('')
+            alertPlaceholder.append(wrapper)
+        }
+
+        // REALIZAR BACKUP
+        function realizar_backup() {
+            fetch("{% url 'backup' %}")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al realizar el backup');
+                }
+                return response.text();
+            })
+            .then(data => {
+                appendAlert(data, 'success');
+            })
+            .catch(error => {
+                appendAlert(error.message, 'danger');
+            });
+        }
+    </script>
+{% endblock %}
