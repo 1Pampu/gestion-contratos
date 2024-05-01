@@ -28,6 +28,10 @@ def backup(request):
 @require_GET
 def descargar_ultimo_backup(request):
     backup_path, backup_name = get_last_backup()
+
+    if backup_path == None or backup_name == None:
+        return HttpResponse('No hay copias de seguridad disponibles.', 404)
+
     with open(backup_path, 'rb') as doc:
         doc = doc.read()
 

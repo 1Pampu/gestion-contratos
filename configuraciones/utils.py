@@ -19,6 +19,8 @@ def compress_backup(files, zip_name):
 def get_last_backup():
     backup_folder = os.path.join(settings.BASE_DIR, 'backup')
     backups = os.listdir(backup_folder)
+    if len(backups) == 0:
+        return None, None
     formato = "Backup_%Y-%m-%d_%H-%M-%S.zip"
     backups_dt = [datetime.strptime(backup, formato) for backup in backups]
     index = max(enumerate(backups_dt), key=lambda x: x[1])[0]
