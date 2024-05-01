@@ -5,23 +5,24 @@
         <h1 class="text-center mt-2 mb-3">Configuraciones</h1>
         <div>
             <h2>Backups</h2>
-            <div>
-                <p>Realizar un backup ahora</p>
-                {% comment %} <a href="{% url 'backup' %}" class="btn btn-primary">Realizar backup</a> {% endcomment %}
-                <button type="button" class="btn btn-primary mb-2" id="BackupAlertBtn" onclick="realizar_backup()">Realizar backup</button>
+            <div class="alert alert-secondary mb-2">
+                <div class="d-flex align-items-center">
+                    <p class="mb-0">Realizar una copia de la base de datos.</p>
+                    <button type="button" class="btn btn-primary mb-0 ms-auto" id="BackupAlertBtn" onclick="realizar_backup()">Realizar BackUp</button>
+                </div>
                 <div id="BackupAlertPlaceholder"></div>
             </div>
-            <div>
-                <p>Lista de backups</p>
-                <a href="#" class="btn btn-primary">Ver Lista</a>
+            <div class="alert alert-secondary d-flex align-items-center mb-2">
+                <p class="mb-0">Mostrar la lista de los BackUps existentes en el servidor.</p>
+                <a href="#" class="btn btn-primary mb-0 ms-auto">Ver Lista</a>
             </div>
-            <div>
-                <p>Programar backups</p>
-                <a href="#" class="btn btn-primary">Programar</a>
+            <div class="alert alert-secondary d-flex align-items-center mb-2">
+                <p class="mb-0">Programar la copia de seguridad automatica.</p>
+                <a href="#" class="btn btn-primary mb-0 ms-auto">Programar</a>
             </div>
-            <div>
-                <p>Restaurar base de datos a partir de un backup</p>
-                <a href="#" class="btn btn-primary">Restaurar</a>
+            <div class="alert alert-secondary d-flex align-items-center mb-2">
+                <p class="mb-0">Restaurar base de datos a partir de un BackUp.</p>
+                <a href="#" class="btn btn-primary mb-0 ms-auto">Restaurar</a>
             </div>
         </div>
     </div>
@@ -32,7 +33,7 @@
         const appendAlert = (message, type) => {
             const wrapper = document.createElement('div')
             wrapper.innerHTML = [
-                `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+                `<div class="alert alert-${type} alert-dismissible mb-0 mt-2" role="alert">`,
                 `   <div>${message}</div>`,
                 '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
                 '</div>'
