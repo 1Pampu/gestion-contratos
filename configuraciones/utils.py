@@ -1,4 +1,5 @@
 from django.conf import settings
+from datetime import datetime
 import zipfile
 import os
 
@@ -14,3 +15,11 @@ def compress_backup(files, zip_name):
 
     os.remove(db_file)
     os.remove(media_file)
+
+def get_last_backup():
+    backup_folder = os.path.join(settings.BASE_DIR, 'backup')
+    backups = os.listdir(backup_folder)
+    formato = "Backup_%Y-%m-%d_%H-%M-%S.zip"
+    backups_dt = [datetime.strptime(backup, formato) for backup in backups]
+    index = max(enumerate(backups_dt), key=lambda x: x[1])[0]
+    return backup_folder + "\\" + backups[index], backups[index]
