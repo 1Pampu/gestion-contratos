@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.decorators.http import require_GET
 from django.http import HttpResponse, HttpResponseServerError, JsonResponse
 from datetime import datetime
-from .utils import create_and_compress_backup, get_last_backup, get_backup_list
+from .utils import create_and_compress_backup, get_backup, get_backup_list
 
 # Create your views here.
 def configs(request):
@@ -20,16 +20,20 @@ def backup(request):
     return HttpResponse('Copia de seguridad realizada correctamente.', 200)
 
 @require_GET
-def descargar_ultimo_backup(request):
-    backup_path, backup_name = get_last_backup()
+def descargar_backup(request):
+    try:
+        index = int(request.GET.get('index', -1))
+    except:
+        return HttpResponseServerError('Índice inválido.')
 
-    if backup_path == None or backup_name == None:
-        return HttpResponse('No hay copias de seguridad disponibles.', 404)
+    valid, backup_path, backup_name = get_backup(index)
+    if not valid:
+        return HttpResponseServerError('No se encontró la copia de seguridad.')
 
     with open(backup_path, 'rb') as doc:
         doc = doc.read()
 
-    response = HttpResponse(doc, content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+    response = HttpResponse(doc, content_type='application/zip')
     response['Content-Disposition'] = f'attachment; filename="{backup_name}"'
     return response
 

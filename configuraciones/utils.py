@@ -39,11 +39,13 @@ def create_and_compress_backup(zip_name):
     os.remove(media_file)
     return True
 
-def get_last_backup():
-    backup_folder, backups, backups_dt = get_backup_data()
-    index = max(enumerate(backups_dt), key=lambda x: x[1])[0]
-    path = os.path.join(backup_folder, backups[index])
-    return path, backups[index]
+def get_backup(index = -1):
+    try:
+        backup_folder, backups, _ = get_backup_data()
+        path = os.path.join(backup_folder, backups[index])
+        return True, path, backups[index]
+    except:
+        return False, None, None
 
 def get_backup_list():
     _, _, backups_dt = get_backup_data()
