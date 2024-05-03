@@ -28,7 +28,7 @@
             </div>
             <div class="alert alert-secondary d-flex align-items-center mb-2">
                 <p class="mb-0">Mostrar la lista de los BackUps existentes en el servidor.</p>
-                <a href="#" class="btn btn-primary mb-0 ms-auto">Ver Lista</a>
+                <button type="button" class="btn btn-primary mb-0 ms-auto" data-bs-toggle="modal" data-bs-target="#backup_list_modal" onclick="request_backup_list()">Ver Lista</button>
             </div>
             <div class="alert alert-secondary d-flex align-items-center mb-2">
                 <p class="mb-0">Programar la copia de seguridad automatica.</p>
@@ -41,22 +41,104 @@
         </div>
     </div>
 
+  <!-- Modal BackUpList -->
+    <div class="modal fade" id="backup_list_modal" tabindex="-1" aria-labelledby="backup_list_modal_label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="backup_list_modal_label">BackUps en el servidor</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col"></th>
+                          </tr>
+                        </thead>
+                        <tbody id="backup_list_tabla">
+                        </tbody>
+                      </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--ICONS-->
+    <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+        <symbol id="check-circle-fill" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+        </symbol>
+        <symbol id="exclamation-triangle-fill" viewBox="0 0 16 16">
+            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+        </symbol>
+        <symbol id="trash-icon" viewBox="0 0 16 16">
+            <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+        </symbol>
+        <symbol id="download-icon" viewBox="0 0 16 16">
+            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
+        </symbol>
+        <symbol id="reboot-icon" viewBox="0 0 16 16">
+            <path d="M1.161 8a6.84 6.84 0 1 0 6.842-6.84.58.58 0 1 1 0-1.16 8 8 0 1 1-6.556 3.412l-.663-.577a.58.58 0 0 1 .227-.997l2.52-.69a.58.58 0 0 1 .728.633l-.332 2.592a.58.58 0 0 1-.956.364l-.643-.56A6.8 6.8 0 0 0 1.16 8z"/>
+            <path d="M6.641 11.671V8.843h1.57l1.498 2.828h1.314L9.377 8.665c.897-.3 1.427-1.106 1.427-2.1 0-1.37-.943-2.246-2.456-2.246H5.5v7.352zm0-3.75V5.277h1.57c.881 0 1.416.499 1.416 1.32 0 .84-.504 1.324-1.386 1.324z"/>
+        </symbol>
+    </svg>
+
     <script>
-        // ALERT MESSAGE REALIZAR BACKUP NOW
-        const alertPlaceholder = document.getElementById('BackupAlertPlaceholder')
+        // ALERT MESSAGE REALIZAR BACKUP
+        const BackupAlertPlaceholder = document.getElementById('BackupAlertPlaceholder')
         const appendAlert = (message, type) => {
             const wrapper = document.createElement('div')
             wrapper.innerHTML = [
                 `<div class="alert alert-${type} mb-0 mt-2 d-flex align-items-center fade show" role="alert">`,
-                `   <svg class="bi flex-shrink-0 me-2" role="img" aria-label="${type.charAt(0).toUpperCase() + type.slice(1)}:"><use xlink:href="#check-circle-fill"/></svg>`,
-                `   <div class="mb-0">${message}</div>`,
-                `   <div class="ms-auto d-flex align-items-center">`,
-                        (type !== 'danger' ? `<a href="{% url "descargar_ultimo_backup" %}" class="btn btn-success mb-0 ms-auto me-3">Descargar</a>` : ''),
-                '       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-                `   </div>`,
-                '</div>'
+                    `   <svg class="bi flex-shrink-0 me-2" role="img" aria-label="${type.charAt(0).toUpperCase() + type.slice(1)}:"><use xlink:href="#check-circle-fill"/></svg>`,
+                    `   <div class="mb-0">${message}</div>`,
+                    `   <div class="ms-auto d-flex align-items-center">`,
+                            (type !== 'danger' ? `<a href="{% url "descargar_ultimo_backup" %}" class="btn btn-success mb-0 ms-auto me-3">Descargar</a>` : ''),
+                    '       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+                    `   </div>`,
+                    '</div>'
             ].join('')
-            alertPlaceholder.append(wrapper)
+            BackupAlertPlaceholder.append(wrapper)
+        }
+
+        // ACTUALIZAR DATOS LISTA BACKUPS
+        function actualizar_tabla(data) {
+            const tabla = document.getElementById('backup_list_tabla');
+            tabla.innerHTML = '';
+            let i = 0;
+            data.forEach(function(backup_str){
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <th scope="row">${i}</th>
+                    <td>${backup_str}</td>
+                    <td class="d-flex justify-content-end">
+                        <a href="" class="btn btn-primary mb-0 ms-auto">
+                            <svg class="bi bi-download" width="16" height="16" fill="currentColor">
+                                <use xlink:href="#reboot-icon"/>
+                            </svg>
+                        </a>
+                        <a href="" class="btn btn-success mb-0 ms-auto">
+                            <svg class="bi bi-download" width="16" height="16" fill="currentColor">
+                                <use xlink:href="#download-icon"/>
+                            </svg>
+                        </a>
+                        <a href="" class="btn btn-danger mb-0 ms-auto">
+                            <svg width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                <use xlink:href="#trash-icon"></use>
+                            </svg>
+                        </a>
+                    </td>
+                `;
+                i++;
+                tabla.appendChild(row);
+            })
         }
 
         // REALIZAR BACKUP
@@ -73,6 +155,23 @@
             })
             .catch(error => {
                 appendAlert(error.message, 'danger');
+            });
+        }
+
+        // REQUEST BACKUP LIST
+        function request_backup_list() {
+            fetch("{% url 'backup_list' %}")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al obtener la lista de backups');
+                }
+                return response.json();
+            })
+            .then(data => {
+                actualizar_tabla(data.backup_list);
+            })
+            .catch(error => {
+                console.error(error.message);
             });
         }
     </script>
