@@ -1,9 +1,8 @@
 from django.shortcuts import render
 from django.views.decorators.http import require_GET
-from django.http import HttpResponse
-from django.core import management
+from django.http import HttpResponse, HttpResponseServerError, JsonResponse
 from datetime import datetime
-from .utils import compress_backup, get_last_backup
+from .utils import create_and_compress_backup, get_last_backup, get_backup_list
 
 # Create your views here.
 def configs(request):
@@ -14,14 +13,9 @@ def backup(request):
     now = datetime.now()
     date = now.strftime("%Y-%m-%d_%H-%M-%S")
 
-    try:
-        management.call_command('dbbackup', output_filename="DB_Backup.dump")
-        management.call_command('mediabackup', output_filename="Media_Backup.tar")
-
-        compress_backup(["DB_Backup.dump", "Media_Backup.tar"], f'Backup_{date}.zip')
-
-    except:
-        return HttpResponse('Error al realizar la copia de seguridad.', 500)
+    valid = create_and_compress_backup(f'Backup_{date}.zip')
+    if not valid:
+        return HttpResponseServerError('Error al realizar la copia de seguridad.')
 
     return HttpResponse('Copia de seguridad realizada correctamente.', 200)
 
@@ -34,3 +28,12 @@ def descargar_ultimo_backup(request):
     response = HttpResponse(doc, content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
     response['Content-Disposition'] = f'attachment; filename="{backup_name}"'
     return response
+
+@require_GET
+def backup_list(request):
+    backup_list = get_backup_list()
+
+    context = {
+        'backup_list': backup_list
+    }
+    return JsonResponse(context)
