@@ -1,8 +1,9 @@
 from django.shortcuts import render
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_GET, require_POST
 from django.http import HttpResponse, HttpResponseServerError, JsonResponse
 from datetime import datetime
 from .utils import create_and_compress_backup, get_backup, get_backup_list
+import os
 
 # Create your views here.
 def configs(request):
@@ -26,7 +27,7 @@ def descargar_backup(request):
     except:
         return HttpResponseServerError('Índice inválido.')
 
-    valid, backup_path, backup_name = get_backup(index)
+    valid, backup_path, backup_name, _ = get_backup(index)
     if not valid:
         return HttpResponseServerError('No se encontró la copia de seguridad.')
 
@@ -45,3 +46,23 @@ def backup_list(request):
         'backup_list': backup_list
     }
     return JsonResponse(context)
+
+@require_POST
+def eliminar_backup(request):
+    try:
+        index = int(request.POST.get('index', None))
+        fecha = request.POST.get('fecha', None)
+        valid, backup_path, _, backup_dt = get_backup(index)
+        if not valid:
+            return HttpResponseServerError('No se encontró la copia de seguridad.')
+
+        fecha_dt = datetime.strptime(fecha, "%Y-%m-%dT%H:%M:%S")
+        if not backup_dt == fecha_dt:
+            return HttpResponseServerError('Fecha inválida.')
+
+        os.remove(backup_path)
+
+    except:
+        return HttpResponseServerError('Índice inválido.')
+
+    return HttpResponse('Copia de seguridad eliminada correctamente.', 200)

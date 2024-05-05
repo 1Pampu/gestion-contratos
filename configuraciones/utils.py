@@ -41,9 +41,9 @@ def create_and_compress_backup(zip_name):
 
 def get_backup(index = -1):
     try:
-        backup_folder, backups, _ = get_backup_data()
+        backup_folder, backups, backups_dt = get_backup_data()
         path = os.path.join(backup_folder, backups[index])
-        return True, path, backups[index]
+        return True, path, backups[index], backups_dt[index]
     except:
         return False, None, None
 

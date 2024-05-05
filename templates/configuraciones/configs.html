@@ -137,7 +137,7 @@
             modal_body.innerHTML = is_restore ? `Esta acción restaurara la base de datos de la fecha ${fecha} y eliminara los datos existentes. Desea continuar?` : `¿Desea eliminar el backup del ${fecha}?`;
             modal_footer.innerHTML = `
                 <button class="btn btn-secondary" data-bs-target="#backup_list_modal" data-bs-toggle="modal">Volver</button>
-                <button type="button" class="btn btn-danger" onclick="${funcion}">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="${funcion}">
                     <svg class="bi bi-download" width="16" height="16" fill="currentColor">
                         <use xlink:href="#warning-icon"/>
                     </svg>
@@ -148,7 +148,30 @@
 
         // ELIMINAR BACKUP
         function eliminar_backup(index, fecha){
-            console.log('Eliminar backup', index, fecha)
+            var formData = new FormData();
+            formData.append('index', index);
+            formData.append('fecha', fecha);
+            const url = '{% url "eliminar_backup" %}';
+            const options = {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{csrf_token}}'
+                }
+            }
+            fetch(url, options)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al eliminar el backup');
+                }
+                return response.text();
+            })
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error(error.message);
+            });
         }
 
         // RESTAURAR BACKUP
