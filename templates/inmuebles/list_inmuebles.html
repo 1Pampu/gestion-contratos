@@ -1,6 +1,8 @@
 {% extends "global/base.html" %}
 
 {% block main %}
+    {% include "global/layouts/icons.html" %}
+
     <div class="mx-auto p-2" style="width: 1000px;">
         <h1 class="text-center mt-2 mb-3">Inmuebles <a class="btn btn-success" href="{% url 'agregar_editar_inmueble' %}">Nuevo / Editar</a></h1>
         <table class="table table-bordered">
@@ -13,7 +15,13 @@
                         <td>{{ inmueble }}</td>
                         <td>{{ inmueble.direccion }}</td>
                         <td>{{ inmueble.ciudad }}</td>
-                        <td style="text-align: center;"><a href='{% url "detalle_inmueble" partida=inmueble.partida %}'>Ver</a></td>
+                        <td class="p-0" style="text-align: center; vertical-align:middle;">
+                            <a class="btn btn-primary btn-sm" href='{% url "detalle_inmueble" partida=inmueble.partida %}'>
+                                <svg width="16" height="16" fill="currentColor" class="bi bi-file-earmark-break">
+                                    <use xlink:href="#icono-archivo"></use>
+                                </svg>
+                            </a>
+                        </td>
                     </tr>
                 {% endfor %}
         </table>

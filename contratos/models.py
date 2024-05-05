@@ -13,7 +13,7 @@ class Contrato(models.Model):
     fecha_inicio = models.DateField()
     duracion = models.IntegerField()
     fecha_finalizacion = models.DateField(null=True, blank=True)
-    docx = models.FileField(upload_to='documents/contratos/%Y/%m', null=True, blank=True)
+    docx = models.FileField(upload_to='contratos/%Y/%m', null=True, blank=True)
     active = models.BooleanField(default=True)
 
     def calcular_fin(self):
