@@ -61,6 +61,20 @@
         </div>
     </div>
 
+    <!-- Confirmacion Borrar / Restaurar -->
+    <div class="modal fade" id="confirmacion_modal" aria-hidden="true" aria-labelledby="confirmacion_modal_label" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="confirmacion_modal_label"></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ALERT MESSAGE REALIZAR BACKUP
         const BackupAlertPlaceholder = document.getElementById('BackupAlertPlaceholder')
@@ -90,26 +104,56 @@
                     <th scope="row">${i}</th>
                     <td>${backup_str}</td>
                     <td class="d-flex justify-content-end">
-                        <a href="" class="btn btn-primary mb-0 ms-auto">
+                        <button class="btn btn-primary mb-0 ms-auto" data-bs-target="#confirmacion_modal" data-bs-toggle="modal" onclick="actualizar_confirmacion(true, ${i}, '${backup_str}')">
                             <svg class="bi bi-download" width="16" height="16" fill="currentColor">
                                 <use xlink:href="#reboot-icon"/>
                             </svg>
-                        </a>
+                        </button>
                         <a href="{% url 'descargar_backup' %}?index=${i}" class="btn btn-success mb-0 ms-auto">
                             <svg class="bi bi-download" width="16" height="16" fill="currentColor">
                                 <use xlink:href="#download-icon"/>
                             </svg>
                         </a>
-                        <a href="" class="btn btn-danger mb-0 ms-auto">
+                        <button class="btn btn-danger mb-0 ms-auto" data-bs-target="#confirmacion_modal" data-bs-toggle="modal" onclick="actualizar_confirmacion(false, ${i}, '${backup_str}')">
                             <svg width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
                                 <use xlink:href="#trash-icon"></use>
                             </svg>
-                        </a>
+                        </button>
                     </td>
                 `;
                 i++;
                 tabla.insertBefore(row, tabla.firstChild);
             })
+        }
+
+        // ACTUALIZAR DATOS CONFIRMACION
+        function actualizar_confirmacion(is_restore, index, fecha) {
+            const modal = document.getElementById('confirmacion_modal');
+            const modal_title = document.getElementById('confirmacion_modal_label');
+            const modal_body = document.querySelector('#confirmacion_modal .modal-body');
+            const modal_footer = document.querySelector('#confirmacion_modal .modal-footer');
+            var funcion = is_restore ? `restaurar_backup(${index}, '${fecha}')` : `eliminar_backup(${index}, '${fecha}')`;
+            modal_title.innerHTML = is_restore ? 'Restaurar Backup' : 'Eliminar Backup';
+            modal_body.innerHTML = is_restore ? `Esta acción restaurara la base de datos de la fecha ${fecha} y eliminara los datos existentes. Desea continuar?` : `¿Desea eliminar el backup del ${fecha}?`;
+            modal_footer.innerHTML = `
+                <button class="btn btn-secondary" data-bs-target="#backup_list_modal" data-bs-toggle="modal">Volver</button>
+                <button type="button" class="btn btn-danger" onclick="${funcion}">
+                    <svg class="bi bi-download" width="16" height="16" fill="currentColor">
+                        <use xlink:href="#warning-icon"/>
+                    </svg>
+                    Confirmar
+                </button>
+            `;
+        }
+
+        // ELIMINAR BACKUP
+        function eliminar_backup(index, fecha){
+            console.log('Eliminar backup', index, fecha)
+        }
+
+        // RESTAURAR BACKUP
+        function restaurar_backup(index, fecha){
+            console.log('Restaurar backup', index, fecha)
         }
 
         // REALIZAR BACKUP
