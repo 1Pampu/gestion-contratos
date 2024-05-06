@@ -68,9 +68,7 @@ def restore(bakcup_path):
         with zipfile.ZipFile(bakcup_path, 'r') as zipf:
             zipf.extractall(restore_folder)
 
-        if os.path.exists(settings.MEDIA_ROOT):
-            shutil.rmtree(settings.MEDIA_ROOT)
-
+        shutil.rmtree(settings.MEDIA_ROOT)
         management.call_command('flush', '--noinput')
 
         for app in APPS:
