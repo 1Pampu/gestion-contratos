@@ -1,8 +1,11 @@
 from django.conf import settings
 from django.core import management
 from datetime import datetime
+import shutil
 import zipfile
 import os
+
+APPS = ['personas', 'inmuebles', 'contratos'] # ADD APS TO BACKUP ( IN ORDER FOR FK RELATIONS TO WORK )
 
 def get_backup_data():
     backup_folder = os.path.join(settings.BASE_DIR, 'backup')
@@ -18,24 +21,32 @@ def get_backup_data():
 def create_and_compress_backup(zip_name):
     backup_folder, _, _ = get_backup_data()
 
-    management.call_command('dbbackup', output_filename="DB_Backup.dump")
+    files = []
+    for app in APPS:
+        output = os.path.join(backup_folder, f"{app}.json")
+        management.call_command('dumpdata', app, output=output)
+        files.append(output)
     management.call_command('mediabackup', output_filename="Media_Backup.tar")
 
     zip_path = os.path.join(backup_folder, zip_name)
-    db_file = os.path.join(backup_folder, "DB_Backup.dump")
     media_file = os.path.join(backup_folder, "Media_Backup.tar")
 
     try:
         with zipfile.ZipFile(zip_path, 'w') as zipf:
-            zipf.write(db_file, os.path.basename("DB_Backup.dump"))
             zipf.write(media_file, os.path.basename("Media_Backup.tar"))
+            i = 0
+            for file in files:
+                zipf.write(file, os.path.basename(APPS[i] + ".json"))
+                i += 1
 
     except:
-        os.remove(db_file)
+        for file in files:
+            os.remove(file)
         os.remove(media_file)
         return False
 
-    os.remove(db_file)
+    for file in files:
+        os.remove(file)
     os.remove(media_file)
     return True
 
@@ -50,3 +61,29 @@ def get_backup(index = -1):
 def get_backup_list():
     _, _, backups_dt = get_backup_data()
     return backups_dt
+
+def restore(bakcup_path):
+    restore_folder = os.path.join(settings.BASE_DIR, 'restore')
+    try:
+        with zipfile.ZipFile(bakcup_path, 'r') as zipf:
+            zipf.extractall(restore_folder)
+
+        if os.path.exists(settings.MEDIA_ROOT):
+            shutil.rmtree(settings.MEDIA_ROOT)
+
+        management.call_command('flush', '--noinput')
+
+        for app in APPS:
+            input_path = os.path.join(restore_folder, f"{app}.json")
+            management.call_command('loaddata', input_path)
+
+        media_file = os.path.join(restore_folder, "Media_Backup.tar")
+        management.call_command('mediarestore','--noinput', input_path=media_file)
+
+    except Exception as e:
+        print(e)
+        shutil.rmtree(restore_folder)
+        return False
+
+    shutil.rmtree(restore_folder)
+    return True

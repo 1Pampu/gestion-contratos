@@ -199,7 +199,30 @@
 
         // RESTAURAR BACKUP
         function restaurar_backup(index, fecha){
-            console.log('Restaurar backup', index, fecha)
+            var formData = new FormData();
+            formData.append('index', index);
+            formData.append('fecha', fecha);
+            const url = '{% url "restaurar_backup" %}';
+            const options = {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{csrf_token}}'
+                }
+            }
+            fetch(url, options)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al restaurar el backup.');
+                }
+                return response.text();
+            })
+            .then(data => {
+                createToast(data);
+            })
+            .catch(error => {
+                createToast(error.message)
+            });
         }
 
         // REALIZAR BACKUP
