@@ -35,5 +35,5 @@ include/
 migrations/
 
 # Extras
-/documents/contratos/
+/documents/*
 /backup/*

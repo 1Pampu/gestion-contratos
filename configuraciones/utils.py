@@ -9,6 +9,8 @@ APPS = ['personas', 'inmuebles', 'contratos'] # ADD APS TO BACKUP ( IN ORDER FOR
 
 def get_backup_data():
     backup_folder = os.path.join(settings.BASE_DIR, 'backup')
+    if not os.path.exists(backup_folder):
+            os.makedirs(backup_folder)
     backups = os.listdir(backup_folder)
 
     if not len(backups) == 0:
@@ -22,16 +24,19 @@ def create_and_compress_backup(zip_name):
     backup_folder, _, _ = get_backup_data()
 
     files = []
-    for app in APPS:
-        output = os.path.join(backup_folder, f"{app}.json")
-        management.call_command('dumpdata', app, output=output)
-        files.append(output)
-    management.call_command('mediabackup', output_filename="Media_Backup.tar")
-
-    zip_path = os.path.join(backup_folder, zip_name)
-    media_file = os.path.join(backup_folder, "Media_Backup.tar")
-
     try:
+        for app in APPS:
+            output = os.path.join(backup_folder, f"{app}.json")
+            management.call_command('dumpdata', app, output=output)
+            files.append(output)
+
+        if not os.path.exists(settings.MEDIA_ROOT):
+            os.makedirs(settings.MEDIA_ROOT)
+        management.call_command('mediabackup', output_filename="Media_Backup.tar")
+
+        zip_path = os.path.join(backup_folder, zip_name)
+        media_file = os.path.join(backup_folder, "Media_Backup.tar")
+
         with zipfile.ZipFile(zip_path, 'w') as zipf:
             zipf.write(media_file, os.path.basename("Media_Backup.tar"))
             i = 0
@@ -58,30 +63,38 @@ def get_backup(index = -1):
     except:
         return False, None, None
 
-def get_backup_list():
-    _, _, backups_dt = get_backup_data()
-    return backups_dt
-
 def restore(bakcup_path):
     restore_folder = os.path.join(settings.BASE_DIR, 'restore')
     try:
         with zipfile.ZipFile(bakcup_path, 'r') as zipf:
             zipf.extractall(restore_folder)
 
-        shutil.rmtree(settings.MEDIA_ROOT)
+        if os.path.exists(settings.MEDIA_ROOT):
+            shutil.rmtree(settings.MEDIA_ROOT)
         management.call_command('flush', '--noinput')
 
         for app in APPS:
-            input_path = os.path.join(restore_folder, f"{app}.json")
+            input_path = os.path.join(restore_folder, f'{app}.json')
             management.call_command('loaddata', input_path)
-
         media_file = os.path.join(restore_folder, "Media_Backup.tar")
         management.call_command('mediarestore','--noinput', input_path=media_file)
+        if not os.path.exists(settings.MEDIA_ROOT):
+            os.makedirs(settings.MEDIA_ROOT)
 
     except Exception as e:
-        print(e)
+        if not os.path.exists(settings.MEDIA_ROOT):
+            os.makedirs(settings.MEDIA_ROOT)
         shutil.rmtree(restore_folder)
         return False
 
     shutil.rmtree(restore_folder)
+    return True
+
+def delete_database():
+    try:
+        management.call_command('flush', '--noinput')
+        shutil.rmtree(settings.MEDIA_ROOT)
+        os.mkdir(settings.MEDIA_ROOT)
+    except:
+        return False
     return True

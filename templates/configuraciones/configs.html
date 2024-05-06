@@ -30,6 +30,10 @@
                 <p class="mb-0">Restaurar base de datos a partir de un BackUp.</p>
                 <a href="#" class="btn btn-primary mb-0 ms-auto">Restaurar</a>
             </div>
+            <div class="alert alert-danger d-flex align-items-center mb-2">
+                <p class="mb-0">Eliminar todos los datos existentes en la base de datos.</p>
+                <button type="button" class="btn btn-danger mb-0 ms-auto" data-bs-toggle="modal" data-bs-target="#confirmacion_database_modal">Borrar</button>
+            </div>
         </div>
     </div>
 
@@ -61,7 +65,7 @@
         </div>
     </div>
 
-    <!-- Confirmacion Borrar / Restaurar -->
+    <!-- Confirmacion Borrar / Restaurar Backups -->
     <div class="modal fade" id="confirmacion_modal" aria-hidden="true" aria-labelledby="confirmacion_modal_label" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -71,6 +75,28 @@
                 </div>
                 <div class="modal-body"></div>
                 <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmacion Eliminar Base de datos -->
+    <div class="modal fade" id="confirmacion_database_modal" aria-hidden="true" aria-labelledby="confirmacion_database_modal_label" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="confirmacion_database_modal_label">Eliminar base de datos</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">Esta accion eliminara completamente todos los datos registrados en la base de datos. Es recomendable hacer una copia antes de hacer esto. ¿Desea continuar?</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Volver</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="eliminar_database()">
+                        <svg class="bi bi-download" width="16" height="16" fill="currentColor">
+                            <use xlink:href="#warning-icon"/>
+                        </svg>
+                        Borrar
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -167,6 +193,30 @@
                     Confirmar
                 </button>
             `;
+        }
+
+        // ELIMINAR DATABASE
+        function eliminar_database() {
+            const url = '{% url "eliminar_db" %}';
+            const options = {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{csrf_token}}'
+                }
+            }
+            fetch(url, options)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al eliminar la base de datos');
+                }
+                return response.text();
+            })
+            .then(data => {
+                createToast(data);
+            })
+            .catch(error => {
+                createToast(error.message);
+            });
         }
 
         // ELIMINAR BACKUP
