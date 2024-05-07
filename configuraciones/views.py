@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.decorators.http import require_GET, require_POST
 from django.http import HttpResponse, HttpResponseServerError, JsonResponse
 from datetime import datetime
-from .utils import create_and_compress_backup, get_backup, get_backup_data, restore, delete_database
+from .utils import create_and_compress_backup, get_backup, get_backup_data, restore, delete_database, check_file
 import os
 
 # Create your views here.
@@ -95,3 +95,16 @@ def eliminar_database(request):
     if not valid:
         return HttpResponseServerError('Error al eliminar la base de datos.')
     return HttpResponse('Base de datos eliminada correctamente.', 200)
+
+@require_POST
+def restaurar_backup_archivo(request):
+    archivo = request.FILES['archivo']
+
+    valid, path_or_error = check_file(archivo)
+    if not valid:
+        return HttpResponseServerError(f'{path_or_error}')
+
+    valid = restore(path_or_error)
+    if not valid:
+        return HttpResponseServerError('Error al restaurar la copia de seguridad.')
+    return HttpResponse('Copia de seguridad restaurada correctamente.', 200)

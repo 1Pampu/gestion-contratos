@@ -9,4 +9,5 @@ urlpatterns = [
     path('eliminar_backup/', eliminar_backup, name='eliminar_backup'),
     path('restaurar_backup/', restaurar_backup, name='restaurar_backup'),
     path('eliminar_db/', eliminar_database, name='eliminar_db'),
+    path('restaurar_backup_archivo/', restaurar_backup_archivo, name='restaurar_backup_archivo')
 ]

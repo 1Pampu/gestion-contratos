@@ -98,3 +98,21 @@ def delete_database():
     except:
         return False
     return True
+
+def check_file(file):
+    if not file.name.endswith('.zip'):
+        return False, 'Extension inválida.'
+
+    restore_folder = os.path.join(settings.BASE_DIR, 'restore')
+    os.makedirs(restore_folder)
+
+    try:
+        restore_file = os.path.join(restore_folder, file.name)
+        with open(restore_file, 'wb+') as destino:
+            for parte in file.chunks():
+                destino.write(parte)
+    except:
+        shutil.rmtree(restore_folder)
+        return False, 'Error al guardar el archivo.'
+
+    return True, restore_file

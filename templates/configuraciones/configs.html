@@ -28,7 +28,7 @@
             </div>
             <div class="alert alert-secondary d-flex align-items-center mb-2">
                 <p class="mb-0">Restaurar base de datos a partir de un BackUp.</p>
-                <a href="#" class="btn btn-primary mb-0 ms-auto">Restaurar</a>
+                <button type="button" class="btn btn-primary mb-0 ms-auto" data-bs-toggle="modal" data-bs-target="#restaurar_db_archivo">Restaurar</button>
             </div>
             <div class="alert alert-danger d-flex align-items-center mb-2">
                 <p class="mb-0">Eliminar todos los datos existentes en la base de datos.</p>
@@ -97,6 +97,34 @@
                         Borrar
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Restaurar Backup desde archivo  -->
+    <div class="modal fade" id="restaurar_db_archivo" aria-hidden="true" aria-labelledby="restaurar_db_archivo_label" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="restaurar_db_archivo_label">Restaurar BackUp desde un archivo</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{% url 'restaurar_backup_archivo' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <p>Suba el archivo de backup que desea restaurar. Éste debe tener la extension .zip</p>
+                        <input type="file" required name="archivo">
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-bs-dismiss="modal">Volver</button>
+                        <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">
+                            <svg class="bi bi-download" width="16" height="16" fill="currentColor">
+                                <use xlink:href="#warning-icon"/>
+                            </svg>
+                            Restaurar
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -194,6 +222,24 @@
                 </button>
             `;
         }
+
+        // ATRAPAR FORM
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var url = this.getAttribute('action');
+            var formData = new FormData(this);
+            fetch(url, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                createToast(data);
+            })
+            .catch(error => {
+                createToast(data);
+            });
+        });
 
         // ELIMINAR DATABASE
         function eliminar_database() {
