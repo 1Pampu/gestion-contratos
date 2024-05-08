@@ -1,7 +1,9 @@
 {% extends "global/base.html" %}
+{% load static %}
 
 {% block head %}
     <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+    <script src="{% static 'scripts/toast.js' %}"></script>
 {% endblock head %}
 
 {% block main %}
@@ -129,26 +131,6 @@
     <div class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 
     <script>
-        // CREATE TOAST
-        function createToast(body, title = 'Notificación') {
-            const toast = document.createElement('div')
-            toast.classList.add('toast', 'fade', 'show')
-            toast.setAttribute('role', 'alert')
-            toast.setAttribute('aria-live', 'assertive')
-            toast.setAttribute('aria-atomic', 'true')
-            toast.innerHTML = `
-                <div class="toast-header">
-                    <strong class="me-auto">${title}</strong>
-                    <small>Ahora</small>
-                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-                <div class="toast-body">
-                    ${body}
-                </div>
-            `
-            document.querySelector('.toast-container').appendChild(toast)
-        }
-
         // ALERT MESSAGE REALIZAR BACKUP
         const BackupAlertPlaceholder = document.getElementById('BackupAlertPlaceholder')
         const appendAlert = (message, type) => {
