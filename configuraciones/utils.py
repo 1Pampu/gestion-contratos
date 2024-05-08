@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.core import management
 from datetime import datetime
-import shutil
 import zipfile
 import os
 
@@ -69,8 +68,7 @@ def restore(bakcup_path):
         with zipfile.ZipFile(bakcup_path, 'r') as zipf:
             zipf.extractall(restore_folder)
 
-        if os.path.exists(settings.MEDIA_ROOT):
-            shutil.rmtree(settings.MEDIA_ROOT)
+        delete_folder_and_content(settings.MEDIA_ROOT)
         management.call_command('flush', '--noinput')
 
         for app in APPS:
@@ -84,16 +82,16 @@ def restore(bakcup_path):
     except Exception as e:
         if not os.path.exists(settings.MEDIA_ROOT):
             os.makedirs(settings.MEDIA_ROOT)
-        shutil.rmtree(restore_folder)
+        delete_folder_and_content(restore_folder)
         return False
 
-    shutil.rmtree(restore_folder)
+    delete_folder_and_content(restore_folder)
     return True
 
 def delete_database():
     try:
         management.call_command('flush', '--noinput')
-        shutil.rmtree(settings.MEDIA_ROOT)
+        delete_folder_and_content(settings.MEDIA_ROOT)
         os.mkdir(settings.MEDIA_ROOT)
     except:
         return False
@@ -104,6 +102,7 @@ def check_file(file):
         return False, 'Extension inválida.'
 
     restore_folder = os.path.join(settings.BASE_DIR, 'restore')
+    delete_folder_and_content(restore_folder)
     os.makedirs(restore_folder)
 
     try:
@@ -112,7 +111,29 @@ def check_file(file):
             for parte in file.chunks():
                 destino.write(parte)
     except:
-        shutil.rmtree(restore_folder)
+        delete_folder_and_content(restore_folder)
         return False, 'Error al guardar el archivo.'
 
     return True, restore_file
+
+def delete_folder_and_content(path):
+
+    if not os.path.exists(path):
+        return True, None
+
+    try:
+        elementos = os.listdir(path)
+
+        for elemento in elementos:
+            elemento_path = os.path.join(path, elemento)
+            if os.path.isdir(elemento_path):
+                delete_folder_and_content(elemento_path)
+            else:
+                os.remove(elemento_path)
+
+        os.rmdir(path)
+
+    except Exception as e:
+        return False, e
+
+    return True, None
