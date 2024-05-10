@@ -1,96 +1,83 @@
 {% extends "global/base.html" %}
+{% load static %}
+
+{% block head %}
+    <script src="{% static 'scripts/back_button.js' %}"></script>
+{% endblock head %}
 
 {% block main %}
-    <div  class="mx-auto p-2" style="width: 800px;">
+    {% include "global/layouts/icons.html" %}
+
+    <div  class="mx-auto p-2 mt-1" style="width: 800px;">
         <h1 class="text-center mt-2">Resumen del Contrato</h1>
-        <h2>Locador</h2>
+        <hr>
         <div class="row g-1">
-            <div class="col-12">
-                <label class="form-label">Nombre:</label>
+            <div class="col-md-2">
+                <input class="form-control" type="text" value="Locador" disabled readonly>
+            </div>
+            <a class="col-1 btn btn-primary" href="{% url 'detalle_persona' dni=contrato.locador.dni %}">
+                <svg width="16" height="16" fill="currentColor" class="bi bi-file-earmark-break">
+                    <use xlink:href="#person-info"></use>
+                </svg>
+            </a>
+            <div class="col-md-2">
+                <input class="form-control" type="text" value="{{contrato.locador}}" disabled readonly>
+            </div>
+            <div class="col-md-4">
                 <input class="form-control" type="text" value="{{contrato.locador.nombre}}" disabled readonly>
             </div>
-            <div class="col-md-2">
-                <label class="form-label">DNI:</label>
-                <input class="form-control" type="text" value="{{contrato.locador.dni}}" disabled readonly>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Email:</label>
-                <input class="form-control" type="text" value="{{contrato.locador.email}}" disabled readonly>
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Celular:</label>
+            <div class="col-md-3">
                 <input class="form-control" type="text" value="{{contrato.locador.celular}}" disabled readonly>
             </div>
-            <div class="col-md-6">
-                <label class="form-label">Domicilio:</label>
-                <input class="form-control" type="text" value="{{contrato.locador.domicilio}}" disabled readonly>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Ciudad:</label>
-                <input class="form-control" type="text" value="{{contrato.locador.ciudad}}" disabled readonly>
-            </div>
         </div>
-        <hr>
 
-        <h2>Locatario</h2>
-        <div class="row g-1">
-            <div class="col-12">
-                <label class="form-label">Nombre:</label>
+        <div class="row g-1 mt-1">
+            <div class="col-md-2">
+                <input class="form-control" type="text" value="Locatario" disabled readonly>
+            </div>
+            <a class="col-1 btn btn-primary" href="{% url 'detalle_persona' dni=contrato.locatario.dni %}">
+                <svg width="16" height="16" fill="currentColor" class="bi bi-file-earmark-break">
+                    <use xlink:href="#person-info"></use>
+                </svg>
+            </a>
+            <div class="col-md-2">
+                <input class="form-control" type="text" value="{{contrato.locatario}}" disabled readonly>
+            </div>
+            <div class="col-md-4">
                 <input class="form-control" type="text" value="{{contrato.locatario.nombre}}" disabled readonly>
             </div>
-            <div class="col-md-2">
-                <label class="form-label">DNI:</label>
-                <input class="form-control" type="text" value="{{contrato.locatario.dni}}" disabled readonly>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Email:</label>
-                <input class="form-control" type="text" value="{{contrato.locatario.email}}" disabled readonly>
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Celular:</label>
+            <div class="col-md-3">
                 <input class="form-control" type="text" value="{{contrato.locatario.celular}}" disabled readonly>
             </div>
-            <div class="col-md-6">
-                <label class="form-label">Domicilio:</label>
-                <input class="form-control" type="text" value="{{contrato.locatario.domicilio}}" disabled readonly>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Ciudad:</label>
-                <input class="form-control" type="text" value="{{contrato.locatario.ciudad}}" disabled readonly>
-            </div>
         </div>
-        <hr>
 
-        <h2>Garantia de Locacion</h2>
-        <div class="row g-1">
-            <div class="col-12">
-                <label class="form-label">Nombre:</label>
-                <input class="form-control" type="text" value="{{contrato.garantia.nombre}}" disabled readonly>
-            </div>
+        <div class="row g-1 mt-1">
             <div class="col-md-2">
-                <label class="form-label">DNI:</label>
-                <input class="form-control" type="text" value="{{contrato.garantia.dni}}" disabled readonly>
+                <input class="form-control" type="text" value="Garantia" disabled readonly>
             </div>
-            <div class="col-md-6">
-                <label class="form-label">Email:</label>
-                <input class="form-control" type="text" value="{{contrato.garantia.email}}" disabled readonly>
+            <a class="col-1 btn btn-primary" href="{% url 'detalle_persona' dni=contrato.garantia.dni %}">
+                <svg width="16" height="16" fill="currentColor" class="bi bi-file-earmark-break">
+                    <use xlink:href="#person-info"></use>
+                </svg>
+            </a>
+            <div class="col-md-2">
+                <input class="form-control" type="text" value="{{contrato.garantia}}" disabled readonly>
             </div>
             <div class="col-md-4">
-                <label class="form-label">Celular:</label>
+                <input class="form-control" type="text" value="{{contrato.garantia.nombre}}" disabled readonly>
+            </div>
+            <div class="col-md-3">
                 <input class="form-control" type="text" value="{{contrato.garantia.celular}}" disabled readonly>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Domicilio:</label>
-                <input class="form-control" type="text" value="{{contrato.garantia.domicilio}}" disabled readonly>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Ciudad:</label>
-                <input class="form-control" type="text" value="{{contrato.garantia.ciudad}}" disabled readonly>
             </div>
         </div>
         <hr>
 
-        <h2>Inmueble</h2>
+        <h2 class="">Inmueble
+            <a class="col-1 btn btn-primary" href="{% url 'detalle_inmueble' partida=contrato.inmueble.partida %}">
+            <svg width="16" height="16" fill="currentColor" class="bi bi-file-earmark-break">
+                <use xlink:href="#inmueble-info"></use>
+            </svg>
+        </a></h2>
         <div class="row g-1">
             <div class="col-md-2">
                 <label class="form-label">Nº de Partida:</label>
@@ -131,13 +118,15 @@
             </div>
         </div>
         <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5 mt-3">
-            <a class="btn btn-danger me-md-2" href="{% url 'archivar_contrato' id_contrato=contrato.id %}">{% if contrato.active == True %}
+            <a class="btn btn-danger me-md-2" href="{% url 'archivar_contrato' id_contrato=contrato.id %}">
+            {% if contrato.active == True %}
                 Archivar
             {% else %}
                 Desarchivar
-            {% endif %}</a>
+            {% endif %}
+            </a>
             <a class="btn btn-success me-md-2" href="{% url 'descargar_contrato' id_contrato=contrato.id %}">Descargar</a>
-            <a class="btn btn-secondary" href="{% url 'index' %}">Volver</a>
+            <button class="btn btn-secondary" onclick="volver()">Volver</button>
         </div>
     </div>
 {% endblock %}
