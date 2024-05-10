@@ -13,7 +13,7 @@ def autocompletar_docx(contrato):
     datos = {
         # Locador Info
         'nombre_locador' : contrato.locador.nombre.upper(),
-        'dni_locador' : contrato.locador.dni,
+        'dni_locador' : contrato.locador,
         'email_locador' : contrato.locador.email,
         'celular_locador' : contrato.locador.celular,
         'domicilio_locador' : contrato.locador.domicilio,
@@ -21,7 +21,7 @@ def autocompletar_docx(contrato):
 
         # Locatario Info
         'nombre_locatario' : contrato.locatario.nombre.upper(),
-        'dni_locatario' : contrato.locatario.dni,
+        'dni_locatario' : contrato.locatario,
         'email_locatario' : contrato.locatario.email,
         'celular_locatario' : contrato.locatario.celular,
         'domicilio_locatario' : contrato.locatario.domicilio,
@@ -29,7 +29,7 @@ def autocompletar_docx(contrato):
 
         # Garantia Info
         'nombre_garantia' : contrato.garantia.nombre.upper(),
-        'dni_garantia' : contrato.garantia.dni,
+        'dni_garantia' : contrato.garantia,
         'email_garantia' : contrato.garantia.email,
         'celular_garantia' : contrato.garantia.celular,
         'domicilio_garantia' : contrato.garantia.domicilio,

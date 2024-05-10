@@ -36,3 +36,11 @@ class Contrato(models.Model):
 
     def __str__(self):
         return f'{self.locador} - {self.locatario} - {self.inmueble}'
+
+class ContratoDetalle(models.Model):
+    contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, related_name='contrato_detalle')
+    composicion = models.TextField(max_length=500, default='', null=True, blank=True)
+    condicion = models.TextField(max_length=2000, default='', null=True, blank=True)
+
+    def __str__(self):
+        return f'Detalle del contrato: {self.contrato.id}'

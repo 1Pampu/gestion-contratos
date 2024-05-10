@@ -11,69 +11,31 @@
     <div  class="mx-auto p-2 mt-1" style="width: 800px;">
         <h1 class="text-center mt-2">Resumen del Contrato</h1>
         <hr>
-        <div class="row g-1">
-            <div class="col-md-2">
-                <input class="form-control" type="text" value="Locador" disabled readonly>
-            </div>
-            <a class="col-1 btn btn-primary" href="{% url 'detalle_persona' dni=contrato.locador.dni %}">
-                <svg width="16" height="16" fill="currentColor" class="bi bi-file-earmark-break">
-                    <use xlink:href="#person-info"></use>
-                </svg>
-            </a>
-            <div class="col-md-2">
-                <input class="form-control" type="text" value="{{contrato.locador}}" disabled readonly>
-            </div>
-            <div class="col-md-4">
-                <input class="form-control" type="text" value="{{contrato.locador.nombre}}" disabled readonly>
-            </div>
-            <div class="col-md-3">
-                <input class="form-control" type="text" value="{{contrato.locador.celular}}" disabled readonly>
-            </div>
-        </div>
-
-        <div class="row g-1 mt-1">
-            <div class="col-md-2">
-                <input class="form-control" type="text" value="Locatario" disabled readonly>
-            </div>
-            <a class="col-1 btn btn-primary" href="{% url 'detalle_persona' dni=contrato.locatario.dni %}">
-                <svg width="16" height="16" fill="currentColor" class="bi bi-file-earmark-break">
-                    <use xlink:href="#person-info"></use>
-                </svg>
-            </a>
-            <div class="col-md-2">
-                <input class="form-control" type="text" value="{{contrato.locatario}}" disabled readonly>
-            </div>
-            <div class="col-md-4">
-                <input class="form-control" type="text" value="{{contrato.locatario.nombre}}" disabled readonly>
-            </div>
-            <div class="col-md-3">
-                <input class="form-control" type="text" value="{{contrato.locatario.celular}}" disabled readonly>
-            </div>
-        </div>
-
-        <div class="row g-1 mt-1">
-            <div class="col-md-2">
-                <input class="form-control" type="text" value="Garantia" disabled readonly>
-            </div>
-            <a class="col-1 btn btn-primary" href="{% url 'detalle_persona' dni=contrato.garantia.dni %}">
-                <svg width="16" height="16" fill="currentColor" class="bi bi-file-earmark-break">
-                    <use xlink:href="#person-info"></use>
-                </svg>
-            </a>
-            <div class="col-md-2">
-                <input class="form-control" type="text" value="{{contrato.garantia}}" disabled readonly>
-            </div>
-            <div class="col-md-4">
-                <input class="form-control" type="text" value="{{contrato.garantia.nombre}}" disabled readonly>
-            </div>
-            <div class="col-md-3">
-                <input class="form-control" type="text" value="{{contrato.garantia.celular}}" disabled readonly>
-            </div>
-        </div>
+            {% for cargo, persona in personas %}
+                <div class="row g-1 mt-1">
+                    <div class="col-md-2">
+                        <input class="form-control" type="text" value="{{cargo}}" disabled readonly>
+                    </div>
+                    <a class="col-1 btn btn-primary" href="{% url 'detalle_persona' dni=persona.dni %}">
+                        <svg width="16" height="16" fill="currentColor" class="bi bi-file-earmark-break">
+                            <use xlink:href="#person-info"></use>
+                        </svg>
+                    </a>
+                    <div class="col-md-2">
+                        <input class="form-control" type="text" value="{{persona}}" disabled readonly>
+                    </div>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" value="{{persona.nombre}}" disabled readonly>
+                    </div>
+                    <div class="col-md-3">
+                        <input class="form-control" type="text" value="{{persona.celular}}" disabled readonly>
+                    </div>
+                </div>
+            {% endfor %}
         <hr>
 
         <h2 class="">Inmueble
-            <a class="col-1 btn btn-primary" href="{% url 'detalle_inmueble' partida=contrato.inmueble.partida %}">
+            <a class="btn btn-primary" href="{% url 'detalle_inmueble' partida=contrato.inmueble.partida %}">
             <svg width="16" height="16" fill="currentColor" class="bi bi-file-earmark-break">
                 <use xlink:href="#inmueble-info"></use>
             </svg>
@@ -93,11 +55,11 @@
             </div>
             <div class="col-12">
                 <label class="form-label">Composicion del Inmueble:</label>
-                <textarea class="form-control" disabled readonly style="height: 100px;" >{{contrato.inmueble.composicion}}</textarea>
+                <textarea class="form-control" disabled readonly style="height: 100px;" >{{detalle.composicion}}</textarea>
             </div>
             <div class="col-12">
                 <label class="form-label">Condicion del Inmueble:</label>
-                <textarea class="form-control" disabled readonly style="height: 230px;">{{contrato.inmueble.condicion}}</textarea>
+                <textarea class="form-control" disabled readonly style="height: 230px;">{{detalle.condicion}}</textarea>
             </div>
         </div>
         <hr>

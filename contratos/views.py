@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from .models import Contrato
+from .models import Contrato, ContratoDetalle
 from .forms import ContratoForm
 from .utils import autocompletar_docx, validaciones_contrato
 from django.http import HttpResponse
@@ -37,9 +37,13 @@ def alternar_archivado(request, id_contrato):
 
 def resumen_contrato(request, id_contrato):
     contrato = Contrato.objects.get(pk = id_contrato)
+    detalle = ContratoDetalle.objects.get(contrato = contrato)
+    personas = zip(['Locador', 'Locatario', 'Garantia'], [contrato.locador, contrato.locatario, contrato.garantia])
 
     context = {
-        'contrato': contrato
+        'contrato': contrato,
+        'personas':personas,
+        'detalle': detalle,
     }
     return render(request, 'contratos/resumen_contrato.html', context)
 
@@ -140,6 +144,8 @@ def nuevo_contrato_final(request):
             contrato.active = True
             contrato.save()
             autocompletar_docx(contrato)
+            detalle = ContratoDetalle(contrato = contrato, composicion = contrato.inmueble.composicion, condicion = contrato.inmueble.condicion)
+            detalle.save()
             return redirect('resumen_contrato', id_contrato=contrato.id)
 
     context = {
