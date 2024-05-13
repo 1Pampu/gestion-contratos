@@ -1,5 +1,5 @@
 from django.db import models
-from datetime import timedelta
+from dateutil.relativedelta import relativedelta
 from personas.models import Persona
 from inmuebles.models import Inmueble
 import os
@@ -18,8 +18,7 @@ class Contrato(models.Model):
 
     def calcular_fin(self):
         if self.fecha_inicio and self.duracion:
-            duracion_dias = self.duracion * 30
-            fecha_finalizacion = self.fecha_inicio + timedelta(days=duracion_dias)
+            fecha_finalizacion = self.fecha_inicio + relativedelta(months=self.duracion)
             return fecha_finalizacion
         return None
 
