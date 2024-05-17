@@ -13,5 +13,7 @@ class ContratoForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'fecha_inicio': widget_date,
-            'duracion': widget_integer
+            'duracion': widget_integer,
+            'dia_pago': widget_integer,
+            'plazo_pago': widget_integer,
         }

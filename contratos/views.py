@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from .models import Contrato, ContratoDetalle
+from .models import Contrato, ContratoDetalle, Pago
 from .forms import ContratoForm
-from .utils import autocompletar_docx, validaciones_contrato
+from .utils import autocompletar_docx_contrato, validaciones_contrato
 from django.http import HttpResponse
 from personas.utils import agregar_actualizar_persona, getPersona
 from inmuebles.utils import agregar_actualizar_inmueble, getInmueble
@@ -143,9 +143,12 @@ def nuevo_contrato_final(request):
             contrato.inmueble = getInmueble(request.GET.get('inmueble'))
             contrato.active = True
             contrato.save()
-            autocompletar_docx(contrato)
+            autocompletar_docx_contrato(contrato)
             detalle = ContratoDetalle(contrato = contrato, composicion = contrato.inmueble.composicion, condicion = contrato.inmueble.condicion)
             detalle.save()
+            for i in range(1, contrato.duracion + 1):
+                pago = Pago(contrato = contrato, num_cuota = i)
+                pago.save()
             return redirect('resumen_contrato', id_contrato=contrato.id)
 
     context = {
