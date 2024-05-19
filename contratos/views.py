@@ -160,12 +160,21 @@ def nuevo_contrato_final(request):
     return render(request, 'contratos/nuevo_contrato/terminos.html', context)
 
 def lista_pagos(request, id_contrato):
-    contrato = Contrato.objects.get(pk = id_contrato)
-    pagos = Pago.objects.filter(contrato = contrato).order_by('desde')
+    pagos = Pago.objects.filter(contrato = id_contrato).order_by('desde')
 
     context = {
         'pagos': pagos,
         'nav_cp': 'p',
-        'contrato': contrato,
+        'contrato': pagos[0].contrato,
     }
     return render(request, 'contratos/lista_pagos.html', context)
+
+def pago(request, id_pago):
+    pago = Pago.objects.get(pk = id_pago)
+
+    context = {
+        'pago': pago,
+        'nav_cp': 'p',
+        'contrato': pago.contrato,
+    }
+    return render(request, 'contratos/resumen_pago.html', context)

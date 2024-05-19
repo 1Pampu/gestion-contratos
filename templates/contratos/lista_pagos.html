@@ -13,13 +13,12 @@
                     <h5 class="card-title">{{pago.desde|date:"N Y"}}</h5>
                     <p class="card-text mb-1">A partir de: {{pago.desde|date:"SHORT_DATE_FORMAT"}}</p>
                     <p class="card-text">Vence: {{pago.hasta|date:"SHORT_DATE_FORMAT"}}</p>
-                    <a href="#" class="btn btn-success">Ver Pago</a>
+                    <a href="{% url 'pago' id_pago=pago.id %}" class="btn btn-success">Ver Pago</a>
                   </div>
                 </div>
               </div>
             {% endfor %}
         </div>
     </div>
-
 
 {% endblock main %}

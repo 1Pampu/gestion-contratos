@@ -1,0 +1,13 @@
+{% extends "global/base.html" %}
+
+{% block main %}
+    <div  class="mx-auto p-2 mt-1" style="width: 800px;">
+        {% include "global/layouts/nav_contrato_pagos.html" %}
+        <hr>
+
+        <h2>Cuota {{pago.desde|date:"N Y"}}</h2>
+        <p>A partir de: {{pago.desde|date:"SHORT_DATE_FORMAT"}}</p>
+        <p>Vence: {{pago.hasta|date:"SHORT_DATE_FORMAT"}}</p>
+        <p>Estado: {% if pago.pago %}Pagado{% else %}No Pagado{% endif %}</p>
+    </div>
+{% endblock main %}
