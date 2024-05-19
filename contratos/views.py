@@ -44,6 +44,7 @@ def resumen_contrato(request, id_contrato):
         'contrato': contrato,
         'personas':personas,
         'detalle': detalle,
+        'nav_cp': 'c'
     }
     return render(request, 'contratos/resumen_contrato.html', context)
 
@@ -157,3 +158,14 @@ def nuevo_contrato_final(request):
         'title': 'Terminos del Contrato',
     }
     return render(request, 'contratos/nuevo_contrato/terminos.html', context)
+
+def lista_pagos(request, id_contrato):
+    contrato = Contrato.objects.get(pk = id_contrato)
+    pagos = Pago.objects.filter(contrato = contrato).order_by('desde')
+
+    context = {
+        'pagos': pagos,
+        'nav_cp': 'p',
+        'contrato': contrato,
+    }
+    return render(request, 'contratos/lista_pagos.html', context)

@@ -1,0 +1,10 @@
+<h1 class="text-center mt-2">
+    <ul class="nav justify-content-center nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link {% if nav_cp == 'c' %}active{% endif %}" aria-current="page" href="{% url 'resumen_contrato' id_contrato=contrato.id %}">Contrato</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if nav_cp == 'p' %}active{% endif %}" href='{% url "lista_pagos" id_contrato=contrato.id %}'>Pagos</a>
+        </li>
+  </ul>
+</h1>
