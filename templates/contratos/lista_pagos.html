@@ -1,24 +1,41 @@
 {% extends "global/base.html" %}
 
 {% block main %}
-    <div  class="mx-auto p-2 mt-1" style="width: 800px;">
-        {% include "global/layouts/nav_contrato_pagos.html" %}
-        <hr>
+  <div  class="mx-auto p-2 mt-1" style="width: 800px;">
+    {% include "global/layouts/icons.html" %}
+    {% include "global/layouts/nav_contrato_pagos.html" %}
+    <hr>
 
-        <div class="row">
-            {% for pago in pagos %}
-            <div class="col-sm-4 mb-sm-3">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">{{pago.desde|date:"N Y"}}</h5>
-                    <p class="card-text mb-1">A partir de: {{pago.desde|date:"SHORT_DATE_FORMAT"}}</p>
-                    <p class="card-text">Vence: {{pago.hasta|date:"SHORT_DATE_FORMAT"}}</p>
-                    <a href="{% url 'pago' id_pago=pago.id %}" class="btn btn-success">Ver Pago</a>
-                  </div>
-                </div>
+    <div class="row">
+      {% for pago in pagos %}
+        <div class="col-sm-4 mb-sm-3">
+          <div class="card {% if pago.pago %} border-success {% elif pago.hasta < hoy %} border-danger {% endif %}">
+            <div class="card-header {% if pago.pago %} text-success {% elif pago.hasta < hoy %} text-danger {% endif %}">{{pago.desde|date:"N Y"}}</div>
+            <div class="card-body">
+              {% if pago.pago %}
+                <p class="card-text mb-2">Pagado: {{pago.fecha_pago|date:"SHORT_DATE_FORMAT"}}</p>
+              {% else %}
+                <p class="card-text mb-1">A partir de: {{pago.desde|date:"SHORT_DATE_FORMAT"}}</p>
+                <p class="card-text mb-2">Vence: {{pago.hasta|date:"SHORT_DATE_FORMAT"}}</p>
+              {% endif %}
+              <div class="d-flex justify-content-end">
+                {% if not pago.pago %}
+                  <a href="" class="btn btn-sm btn-success ms-1">
+                    <svg width="16" height="16" fill="currentColor" class="bi bi-file-earmark-break">
+                      <use xlink:href="#cash-coin"></use>
+                    </svg>
+                  </a>
+                {% endif %}
+                <a href="{% url 'pago' id_pago=pago.id %}" class="btn btn-sm btn-primary ms-1">
+                  <svg width="16" height="16" fill="currentColor" class="bi bi-file-earmark-break">
+                    <use xlink:href="#icono-archivo"></use>
+                  </svg>
+                </a>
               </div>
-            {% endfor %}
+            </div>
+          </div>
         </div>
+      {% endfor %}
     </div>
-
+  </div>
 {% endblock main %}

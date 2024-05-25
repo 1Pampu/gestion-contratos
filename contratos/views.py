@@ -6,6 +6,7 @@ from .utils import autocompletar_docx_contrato, validaciones_contrato
 from django.http import HttpResponse
 from personas.utils import agregar_actualizar_persona, getPersona
 from inmuebles.utils import agregar_actualizar_inmueble, getInmueble
+from datetime import date
 
 # Create your views here.
 def index(request):
@@ -166,6 +167,7 @@ def lista_pagos(request, id_contrato):
         'pagos': pagos,
         'nav_cp': 'p',
         'contrato': pagos[0].contrato,
+        'hoy': date.today(),
     }
     return render(request, 'contratos/lista_pagos.html', context)
 
