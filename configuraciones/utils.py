@@ -4,7 +4,7 @@ from datetime import datetime
 import zipfile
 import os
 
-APPS = ['personas', 'inmuebles', 'contratos'] # ADD APS TO BACKUP ( IN ORDER FOR FK RELATIONS TO WORK )
+APPS = ['personas', 'inmuebles', 'contratos', 'pagos'] # ADD APS TO BACKUP ( IN ORDER FOR FK RELATIONS TO WORK )
 
 def get_backup_data():
     backup_folder = os.path.join(settings.BASE_DIR, 'backup')

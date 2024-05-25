@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'contratos',
     'personas',
     'inmuebles',
+    'pagos',
 ]
 
 # Database & Media Backup

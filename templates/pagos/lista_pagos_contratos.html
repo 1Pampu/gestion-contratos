@@ -12,7 +12,8 @@
           <div class="card-header {% if pago.pago %} text-success {% elif pago.hasta < hoy %} text-danger {% endif %}">{{pago.desde|date:"N Y"}}</div>
           <div class="card-body">
             {% if pago.pago %}
-              <p class="card-text mb-2">Pagado: {{pago.fecha_pago|date:"SHORT_DATE_FORMAT"}}</p>
+              <p class="card-text mb-1">Pagado: {{pago.fecha_pago|date:"SHORT_DATE_FORMAT"}}</p>
+              <p class="card-text mb-2">Monto: ${{pago.monto}}</p>
             {% else %}
               <p class="card-text mb-1">A partir de: {{pago.desde|date:"SHORT_DATE_FORMAT"}}</p>
               <p class="card-text mb-2">Vence: {{pago.hasta|date:"SHORT_DATE_FORMAT"}}</p>

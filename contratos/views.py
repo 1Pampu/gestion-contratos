@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from .models import Contrato, ContratoDetalle, Pago
+from .models import Contrato, ContratoDetalle
 from .forms import ContratoForm
 from .utils import autocompletar_docx_contrato, validaciones_contrato
 from django.http import HttpResponse
 from personas.utils import agregar_actualizar_persona, getPersona
 from inmuebles.utils import agregar_actualizar_inmueble, getInmueble
-from datetime import date
+from pagos.models import Pago
 
 # Create your views here.
 def index(request):
@@ -159,24 +159,3 @@ def nuevo_contrato_final(request):
         'title': 'Terminos del Contrato',
     }
     return render(request, 'contratos/nuevo_contrato/terminos.html', context)
-
-def lista_pagos(request, id_contrato):
-    pagos = Pago.objects.filter(contrato = id_contrato).order_by('desde')
-
-    context = {
-        'pagos': pagos,
-        'nav_cp': 'p',
-        'contrato': pagos[0].contrato,
-        'hoy': date.today(),
-    }
-    return render(request, 'contratos/lista_pagos.html', context)
-
-def pago(request, id_pago):
-    pago = Pago.objects.get(pk = id_pago)
-
-    context = {
-        'pago': pago,
-        'nav_cp': 'p',
-        'contrato': pago.contrato,
-    }
-    return render(request, 'contratos/resumen_pago.html', context)

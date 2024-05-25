@@ -12,6 +12,4 @@ urlpatterns = [
     path('nuevo_contrato/final', nuevo_contrato_final, name='nuevo_contrato_final'),
     path('archivados/', contratos_arhivados, name="contratos_archivados"),
     path('archivar/<int:id_contrato>/', alternar_archivado, name='archivar_contrato'),
-    path('lista_pagos/<int:id_contrato>/', lista_pagos, name='lista_pagos'),
-    path('path/<id_pago>', pago, name='pago'),
 ]
