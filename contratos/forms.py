@@ -16,4 +16,5 @@ class ContratoForm(forms.ModelForm):
             'duracion': widget_integer,
             'dia_pago': widget_integer,
             'plazo_pago': widget_integer,
+            'porcentaje_pago': widget_integer,
         }

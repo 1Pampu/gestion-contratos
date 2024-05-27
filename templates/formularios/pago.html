@@ -1,0 +1,37 @@
+<form action="" method="POST" >
+    {% csrf_token %}
+    <div class="input-group mt-3  justify-content-center">
+        <span class="input-group-text">Fecha del Pago</span>
+        {{form.fecha_pago}}
+
+        <span class="input-group-text">Sueldo Empleado de Comercio</span>
+        <span class="input-group-text">$</span>
+        {{form.salario_basico}}
+    </div>
+
+    <div class="input-group mt-3  justify-content-center">
+        <span class="input-group-text">Monto a pagar</span>
+        <span class="input-group-text">$</span>
+        <input id="id_monto" type="text" value="0" disabled>
+    </div>
+
+    <div class="mt-2" style="color:red; font-size: 13px">
+        {{form.errors}}
+    </div>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5 mt-5">
+        <a class="btn btn-secondary" href="{% url 'index' %}">Volver</a>
+        <button class="btn btn-success me-md-2" type="submit">Guardar</button>
+    </div>
+</form>
+
+<script>
+    {% comment %} ! PONER CUANDO ESTA VENCIDO EL DATE INGRESADO EN COLOR ROJO Y APLICAR TASAS {% endcomment %}
+    function calcular_monto(){
+        let salario_basico = document.getElementById('id_salario_basico').value;
+        let monto = document.getElementById('id_monto');
+        let value = salario_basico * ({{contrato.porcentaje_pago|floatformat}} / 100);
+        monto.value = parseFloat(value.toFixed(2));
+    }
+
+    document.getElementById('id_salario_basico').addEventListener('input', calcular_monto);
+</script>

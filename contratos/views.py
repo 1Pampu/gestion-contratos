@@ -134,7 +134,6 @@ def nuevo_contrato_final(request):
     if not valid:
         return render(request, 'global/errors.html', {'error': 404, 'mensaje': f'{url_or_error.capitalize()} no encontrado'})
 
-    form = ContratoForm()
     if request.method == 'POST':
         form = ContratoForm(request.POST)
         if form.is_valid():
@@ -152,6 +151,8 @@ def nuevo_contrato_final(request):
                 pago = Pago(contrato = contrato, num_cuota = i)
                 pago.save()
             return redirect('resumen_contrato', id_contrato=contrato.id)
+    else:
+        form = ContratoForm()
 
     context = {
         'form': form,

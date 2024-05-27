@@ -68,17 +68,23 @@
 
         <h2>Terminos</h2>
         <div class="row g-1">
-            <div class="col-md-3">
-                <label class="form-label">Fecha de Inicio:</label>
+            <div class="input-group mt-3">
+                <span class="input-group-text">Fecha Inicio</span>
                 <input class="form-control" type="date" value="{{contrato.fecha_inicio|date:'Y-m-d'}}" disabled readonly>
-            </div>
-            <div class="col-md-2">
-                <label class="form-label">Duracion:</label>
+
+                <span class="input-group-text">Duracion</span>
                 <input class="form-control" type="text" value="{{contrato.duracion}} Meses" disabled readonly>
+
+                <span class="input-group-text">Monto</span>
+                <input class="form-control" type="text" value="{{contrato.porcentaje_pago}}" disabled readonly>
+                <span class="input-group-text">%</span>
             </div>
-            <div class="col-md-3">
-                <label class="form-label">Fecha de Finalizacion:</label>
-                <input class="form-control" type="date" value="{{contrato.fecha_finalizacion|date:'Y-m-d'}}" disabled readonly>
+            <div class="input-group mt-2">
+                <span class="input-group-text">Día de pago</span>
+                <input class="form-control" type="text" value="{{contrato.dia_pago}}" disabled readonly>
+
+                <span class="input-group-text">Plazo</span>
+                <input class="form-control" type="text" value="{{contrato.plazo_pago}}" disabled readonly>
             </div>
         </div>
         <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5 mt-3">

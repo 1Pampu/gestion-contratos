@@ -5,9 +5,66 @@
         {% include "global/layouts/nav_contrato_pagos.html" %}
         <hr>
 
-        <h2>Cuota {{pago.desde|date:"N Y"}}</h2>
-        <p>A partir de: {{pago.desde|date:"SHORT_DATE_FORMAT"}}</p>
-        <p>Vence: {{pago.hasta|date:"SHORT_DATE_FORMAT"}}</p>
-        <p>Estado: {% if pago.pago %}Pagado{% else %}No Pagado{% endif %}</p>
+        <h2 class="text-center mt-2">Cuota {{pago.desde|date:"N Y"}}</h2>
+        <div class="card ms-auto me-auto" style="max-width: 21rem;">
+            <div class="card-body">
+                <h5 class="card-title text-center">Resumen</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <div class="input-group">
+                        <span class="input-group-text">A partir de</span>
+                        <input type="date" value='{{pago.desde|date:"Y-m-d"}}' disabled>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="input-group">
+                        <span class="input-group-text">Vence</span>
+                        <input type="date" value='{{pago.hasta|date:"Y-m-d"}}' disabled>
+                    </div>
+                </li>
+                <li class="list-group-item d-flex justify-content-center gap-3">
+                    {% if pago.pago %}
+                        <span class="badge text-bg-success">Pagado</span>
+                        {% if pago.vencido %}
+                            <span class="badge text-bg-danger">Vencido</span>
+                        {% else %}
+                            <span class="badge text-bg-success">No Vencido</span>
+                        {% endif %}
+                    {% else %}
+                        <span class="badge text-bg-danger">No Pagado</span>
+                        {% if pago.hasta < hoy  %}
+                            <span class="badge text-bg-danger">Vencido</span>
+                        {% else %}
+                            <span class="badge text-bg-success">No Vencido</span>
+                        {% endif %}
+                    {% endif %}
+                </li>
+                {% if pago.pago %}
+                    <li class="list-group-item">
+                        <div class="input-group">
+                            <span class="input-group-text">Pagado</span>
+                            <input type="date" value='{{pago.hasta|date:"Y-m-d"}}' disabled>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="input-group">
+                            <span class="input-group-text">Salario Básico</span>
+                            <input type="text" style="width:125px" value='$ {{pago.salario_basico}}' disabled>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="input-group">
+                            <span class="input-group-text">Monto</span>
+                            <input type="text" style="width:125px" value='$ {{pago.monto}}' disabled>
+                        </div>
+                    </li>
+                {% endif %}
+            </ul>
+            <div class="card-body">
+                <a href="#" class="card-link">Descargar Factura</a>
+                <a href="#" class="card-link">Another link</a>
+            </div>
+          </div>
     </div>
 {% endblock main %}

@@ -8,8 +8,8 @@
 
     <div class="d-flex flex-wrap justify-content-center">
       {% for pago in pagos %}
-        <div class="card {% if pago.pago %} border-success {% elif pago.hasta < hoy %} border-danger {% endif %} mx-2 mb-2">
-          <div class="card-header {% if pago.pago %} text-success {% elif pago.hasta < hoy %} text-danger {% endif %}">{{pago.desde|date:"N Y"}}</div>
+        <div class="card {% if pago.pago and pago.vencido == True %} border-warning {% elif pago.pago %} border-success {% elif pago.hasta < hoy %} border-danger {% endif %} mx-2 mb-2">
+          <div class="card-header {% if pago.pago and pago.vencido == True %} text-warning {% elif pago.pago %} text-success {% elif pago.hasta < hoy %} text-danger {% endif %}">{{pago.desde|date:"N Y"}}</div>
           <div class="card-body">
             {% if pago.pago %}
               <p class="card-text mb-1">Pagado: {{pago.fecha_pago|date:"SHORT_DATE_FORMAT"}}</p>
@@ -20,7 +20,7 @@
             {% endif %}
             <div class="d-flex justify-content-end">
               {% if not pago.pago %}
-                <a href="" class="btn btn-sm btn-success ms-1">
+                <a href="{% url 'pagar_cuota' id_pago=pago.id %}" class="btn btn-sm btn-success ms-1">
                   <svg width="16" height="16" fill="currentColor" class="bi bi-file-earmark-break">
                     <use xlink:href="#cash-coin"></use>
                   </svg>

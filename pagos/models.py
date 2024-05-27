@@ -14,6 +14,7 @@ class Pago(models.Model):
     vencido = models.BooleanField(default=False)
     fecha_pago = models.DateField(null=True, blank=True)
     factura = models.FileField(upload_to='facturas/%Y/%m', null=True, blank=True)
+    salario_basico = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
     def __str__(self):
         return f'{self.contrato.id} - Cuota {self.num_cuota}'

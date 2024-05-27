@@ -10,13 +10,14 @@ class Contrato(models.Model):
     locatario = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='contratos_locatario', null=True, blank=True)
     garantia = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='contratos_garantia', null=True, blank=True)
     inmueble = models.ForeignKey(Inmueble, on_delete=models.CASCADE, null=True, blank=True)
-    fecha_inicio = models.DateField()
-    duracion = models.IntegerField()
-    fecha_finalizacion = models.DateField(null=True, blank=True)
-    docx = models.FileField(upload_to='contratos/%Y/%m', null=True, blank=True)
     active = models.BooleanField(default=True)
+    fecha_inicio = models.DateField()
+    fecha_finalizacion = models.DateField(null=True, blank=True)
+    duracion = models.IntegerField()
+    docx = models.FileField(upload_to='contratos/%Y/%m', null=True, blank=True)
     dia_pago = models.IntegerField(default=15)
     plazo_pago = models.IntegerField(default=7)
+    porcentaje_pago = models.DecimalField(max_digits=4, decimal_places=2)
 
     def calcular_fin(self):
         if self.fecha_inicio and self.duracion:
