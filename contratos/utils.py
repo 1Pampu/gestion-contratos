@@ -8,7 +8,7 @@ from inmuebles.utils import verificar_inmueble
 
 def autocompletar_docx_contrato(contrato):
     # Abrir el documento
-    doc = DocxTemplate("plantillas_docx/plantilla_contratos.docx")
+    doc = DocxTemplate("plantillas_docx/contratos.docx")
 
     datos = {
         # Locador Info

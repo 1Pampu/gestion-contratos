@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Pago
 from .forms import PagarForm
 from datetime import date, datetime
+from .utils import generar_factura
 
 # Create your views here.
 def lista_pagos_contrato(request, id_contrato):
@@ -51,11 +52,12 @@ def pagar_cuota(request, id_pago):
 
             pago.monto = (salario_basico * (float(pago.contrato.porcentaje_pago) / 100)) + recargo
 
-            # ! LOGICA PARA CREAR FACTURA
-
-
             pago.pago = True
             pago.save()
+
+            # ! LOGICA PARA CREAR FACTURA
+            generar_factura(pago)
+
             return redirect('pago', id_pago = id_pago)
     else:
         form = PagarForm()
