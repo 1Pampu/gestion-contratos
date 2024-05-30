@@ -1,5 +1,6 @@
 from django.conf import settings
 from docxtpl import DocxTemplate
+from configuraciones.utils import delete_folder_and_content
 import subprocess
 import os
 
@@ -27,16 +28,25 @@ def generar_factura(pago):
     }
     doc.render(datos)
 
+    # Libreoffice Installation Path
+    libreoffice = settings.LIBREOFFICE
+
+    # Create Temp folder
     temp_folder = os.path.join(settings.BASE_DIR, 'temp')
     os.makedirs(temp_folder)
-    file = f'Factura Contrato{contrato.id}-Couta{pago.num_cuota}'
-    docx_file_path = os.path.join(temp_folder, f'{file}.docx')
-    doc.save(docx_file_path)
-    subprocess.check_output(['libreoffice', '--convert-to', 'pdf', '--outdir', temp_folder, f'{docx_file_path}'])
-    pago.factura.save(f'{file}.pdf', open(f'{temp_folder}/{file}.pdf', 'rb'))
 
-    os.remove(docx_file_path)
-    os.remove(f'{temp_folder}/{file}.pdf')
-    os.rmdir(temp_folder)
+    try:
+        # Create Completed Docx File
+        file = f'Factura-Contrato{contrato.id}-Couta{pago.num_cuota}'
+        docx_file_path = os.path.join(temp_folder, f'{file}.docx')
+        doc.save(docx_file_path)
+
+        # Convert to Pdf
+        subprocess.check_output([libreoffice, '--headless', '--convert-to', 'pdf', '--outdir', temp_folder, docx_file_path])
+        pdf_path = os.path.join(temp_folder, f'{file}.pdf')
+        pago.factura.save(f'{file}.pdf', open(pdf_path, 'rb'))
+
+    finally:
+        delete_folder_and_content(temp_folder)
 
     return True

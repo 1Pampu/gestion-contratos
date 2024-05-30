@@ -61,10 +61,11 @@
                     </li>
                 {% endif %}
             </ul>
-            <div class="card-body">
-                <a href="#" class="card-link">Descargar Factura</a>
-                <a href="#" class="card-link">Another link</a>
-            </div>
+            {% if pago.pago %}
+                <div class="card-body text-center">
+                    <a href='{% url "descargar_factura" id_pago=pago.id %}' class="btn btn-success">Descargar Factura</a>
+                </div>
+            {% endif %}
           </div>
     </div>
 {% endblock main %}

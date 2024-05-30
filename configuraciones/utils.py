@@ -9,7 +9,7 @@ APPS = ['personas', 'inmuebles', 'contratos', 'pagos'] # ADD APS TO BACKUP ( IN 
 def get_backup_data():
     backup_folder = os.path.join(settings.BASE_DIR, 'backup')
     if not os.path.exists(backup_folder):
-            os.makedirs(backup_folder)
+        os.makedirs(backup_folder)
     backups = os.listdir(backup_folder)
 
     if not len(backups) == 0:

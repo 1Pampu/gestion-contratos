@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from .models import Pago
 from .forms import PagarForm
 from datetime import date, datetime
@@ -54,8 +55,6 @@ def pagar_cuota(request, id_pago):
 
             pago.pago = True
             pago.save()
-
-            # ! LOGICA PARA CREAR FACTURA
             generar_factura(pago)
 
             return redirect('pago', id_pago = id_pago)
@@ -70,3 +69,15 @@ def pagar_cuota(request, id_pago):
         'contrato': pago.contrato,
     }
     return render(request, 'pagos/pagar_cuota.html', context)
+
+def descargar_factura(request, id_pago):
+    pago = Pago.objects.get(pk = id_pago)
+
+    with open(pago.factura.path, 'rb') as pdf:
+        pdf = pdf.read()
+
+    nombre_archivo = pago.factura.name.split('/')[-1]
+
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}"'
+    return response
