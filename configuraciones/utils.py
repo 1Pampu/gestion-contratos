@@ -1,6 +1,11 @@
 from django.conf import settings
 from django.core import management
 from datetime import datetime
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+import smtplib
 import zipfile
 import os
 
@@ -137,3 +142,46 @@ def delete_folder_and_content(path):
         return False, e
 
     return True, None
+
+def send_email(recipient, subject, body, attachments=None):
+    # Configuración del correo del bot
+    sender_email = settings.BOT_EMAIL
+    sender_password = settings.BOT_PASSWORD
+
+    # Construcción del mensaje
+    msg = MIMEMultipart()
+    msg['From'] = sender_email
+    msg['To'] = recipient
+    msg['Subject'] = subject
+
+    # Adjuntar el cuerpo del mensaje
+    msg.attach(MIMEText(body, 'plain'))
+
+    # Adjuntar archivos si los hay
+    if attachments:
+        for file in attachments:
+            try:
+                with open(file, 'rb') as attachment:
+                    part = MIMEBase('application', 'octet-stream')
+                    part.set_payload(attachment.read())
+                encoders.encode_base64(part)
+                part.add_header(
+                    'Content-Disposition',
+                    f'attachment; filename={os.path.basename(file)}',
+                )
+                msg.attach(part)
+            except Exception as e:
+                return False, f"Error adjuntando el archivo {file}: {e}"
+
+    try:
+        # Conectar al servidor SMTP de Gmail
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()  # Iniciar conexión segura
+        server.login(sender_email, sender_password)  # Iniciar sesión
+        server.sendmail(sender_email, recipient, msg.as_string())  # Enviar correo
+    except Exception as e:
+        return False, f"Error al enviar el correo: {e}"
+    finally:
+        server.quit()  # Cerrar la conexión
+
+    return True, "Correo enviado exitosamente"

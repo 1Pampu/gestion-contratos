@@ -6,4 +6,5 @@ urlpatterns = [
     path("<int:id_pago>/", pago, name="pago"),
     path("<int:id_pago>/pagar", pagar_cuota, name="pagar_cuota"),
     path("factura/<int:id_pago>", descargar_factura, name="descargar_factura"),
+    path("factura/<int:id_pago>/enviar", enviar_correo_factura, name="enviar_correo_factura")
 ]

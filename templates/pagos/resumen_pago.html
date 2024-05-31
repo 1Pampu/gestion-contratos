@@ -1,6 +1,12 @@
 {% extends "global/base.html" %}
+{% load static %}
+
+{% block head %}
+    <script src="{% static 'scripts/toast.js' %}"></script>
+{% endblock head %}
 
 {% block main %}
+    {% include "global/layouts/icons.html" %}
     <div  class="mx-auto p-2 mt-1" style="max-width: 800px;">
         {% include "global/layouts/nav_contrato_pagos.html" %}
         <hr>
@@ -62,10 +68,126 @@
                 {% endif %}
             </ul>
             {% if pago.pago %}
-                <div class="card-body text-center">
-                    <a href='{% url "descargar_factura" id_pago=pago.id %}' class="btn btn-success">Descargar Factura</a>
+                <div class="card-body d-flex justify-content-center">
+                    <a href='{% url "descargar_factura" id_pago=pago.id %}' class="btn btn-success me-2">
+                        <svg class="bi bi-download" width="16" height="16" fill="currentColor">
+                            <use xlink:href="#download-icon"/>
+                        </svg>
+                    </a>
+                    <button type="button" class="btn btn-primary ms-2" data-bs-toggle="modal" data-bs-target="#sendEmail">
+                        <svg class="bi bi-download" width="16" height="16" fill="currentColor">
+                            <use xlink:href="#email"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Modal EMAILS -->
+                <div class="modal fade" id="sendEmail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="sendEmailLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="sendEmailLabel">Enviar Factura por Correo</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="emailsForm">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Enviar</th>
+                                                <th scope="col">Email</th>
+                                                <th scope="col"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="backup_list_tabla">
+                                            <tr>
+                                                <td><input class="form-check-input" type="checkbox" name="emails" value="{{contrato.locador.email}}" id="locadorCheck"></td>
+                                                <td>{{contrato.locador.email}}</td>
+                                                <td>Locador</td>
+                                            </tr>
+                                            <tr>
+                                                <td><input class="form-check-input" type="checkbox" name="emails" value="{{contrato.locatario.email}}"></td>
+                                                <td>{{contrato.locatario.email}}</td>
+                                                <td>Locatario</td>
+                                            </tr>
+                                            <tr>
+                                                <td><input class="form-check-input" type="checkbox" name="emails" value="{{contrato.garantia.email}}"></td>
+                                                <td>{{contrato.garantia.email}}</td>
+                                                <td>Garantia</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </form>
+                                <div class="d-flex justify-content-center">
+                                    <button onclick="addEmails()" class="btn btn-success btn-sm pt-0">
+                                        <svg class="bi bi-download" width="16" height="16" fill="currentColor">
+                                            <use xlink:href="#plus-square"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="enviar_correos()">Enviar</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             {% endif %}
-          </div>
+        </div>
     </div>
+
+    <!-- Toast -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+
+    <script>
+        let emailCounter=0;
+        function addEmails()
+        {
+            const idCheckBox = `emailCheck${emailCounter}`;
+            const idEmail = `email${emailCounter}`;
+            const idRow = `row${emailCounter}`;
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td><input class="form-check-input" type="checkbox" name="emails" value="" id="${idCheckBox}" checked ></td>
+                <td><input class="form-control form-control-sm" type="email" onchange="updateCheckValue('${idCheckBox}', '${idEmail}')" id="${idEmail}"></td>
+                <td><button class="btn btn-danger btn-sm pt-0" onclick="deleteRow('${idRow}')">
+                    <svg class="bi bi-trash" width="16" height="16" fill="currentColor">
+                        <use xlink:href="#trash-icon"/>
+                    </svg
+                </button></td>
+            `;
+            newRow.id = idRow;
+            document.getElementById('backup_list_tabla').appendChild(newRow);
+            emailCounter++;
+        }
+
+        function deleteRow(rowId){
+            document.getElementById(rowId).remove();
+        }
+
+        function updateCheckValue(checkId, emailId){
+            const check = document.getElementById(checkId);
+            const email = document.getElementById(emailId);
+            check.value = email.value;
+        }
+
+        function enviar_correos(){
+            const formData = new FormData(document.getElementById('emailsForm'));
+            fetch('{% url "enviar_correo_factura" id_pago=pago.id %}',{
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                createToast(data)
+            })
+            .catch((error) => {
+                createToast(data);
+            });
+        }
+    </script>
 {% endblock main %}

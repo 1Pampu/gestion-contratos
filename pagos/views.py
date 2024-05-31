@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.views.decorators.http import require_POST
 from .models import Pago
 from .forms import PagarForm
 from datetime import date, datetime
 from .utils import generar_factura
+from configuraciones.utils import send_email
 
 # Create your views here.
 def lista_pagos_contrato(request, id_contrato):
@@ -19,6 +21,8 @@ def lista_pagos_contrato(request, id_contrato):
 
 def pago(request, id_pago):
     pago = Pago.objects.get(pk = id_pago)
+    if not pago:
+        return render(request, 'global/errors.html', {'error':'404','message': 'No se ha encontrado el pago'})
 
     context = {
         'pago': pago,
@@ -30,6 +34,8 @@ def pago(request, id_pago):
 
 def pagar_cuota(request, id_pago):
     pago = Pago.objects.get(pk = id_pago)
+    if not pago:
+        return render(request, 'global/errors.html', {'error':'404','message': 'No se ha encontrado el pago'})
 
     if pago.pago:
         return render(request, 'global/errors.html', {'error':'404','message': 'El pago ya fue realizado'})
@@ -72,6 +78,8 @@ def pagar_cuota(request, id_pago):
 
 def descargar_factura(request, id_pago):
     pago = Pago.objects.get(pk = id_pago)
+    if not pago:
+        return render(request, 'global/errors.html', {'error':'404','message': 'No se ha encontrado el pago'})
 
     with open(pago.factura.path, 'rb') as pdf:
         pdf = pdf.read()
@@ -81,3 +89,22 @@ def descargar_factura(request, id_pago):
     response = HttpResponse(pdf, content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}"'
     return response
+
+@require_POST
+def enviar_correo_factura(request, id_pago):
+    emails = request.POST.getlist('emails')
+    if not emails:
+        return HttpResponse('No se ha ingresado ningún correo', 400)
+
+    pago = Pago.objects.get(pk = id_pago)
+    if not pago:
+        return HttpResponse('No se ha encontrado el pago', 404)
+    if not pago.pago:
+        return HttpResponse('El pago no ha sido realizado', 400)
+
+    for email in emails:
+        valid, error = send_email(email, 'Factura', 'Se adjunta la factura de su pago', [pago.factura.path])
+        if not valid:
+            return HttpResponse(f'Error al enviar el correo: {error}', 500)
+
+    return HttpResponse('Correo enviado', 200)
